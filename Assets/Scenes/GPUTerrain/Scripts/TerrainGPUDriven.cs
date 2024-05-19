@@ -15,7 +15,7 @@ public class TerrainGPUDriven
     public bool isManualUpdate;
     private int subMeshIndex = 0;
     private uint[] _argArr = new uint[4];
-    public static Vector3Int HIZ_MAP_SIZE = new Vector3Int(2048, 2048, 4 * 2 - 1);
+    public static Vector3Int HIZ_MAP_SIZE = new Vector3Int(2048, 2048, 4 * 2 - 1);//z:mipCount
 
     private ComputeBuffer mDispatchArgsBuffer =
         new ComputeBuffer(3, sizeof(float), ComputeBufferType.IndirectArguments);

@@ -24,7 +24,8 @@ public class Init : MonoBehaviour
         if (heightMap == null)
         {
             int terrainNum = terrains.Length;
-            int splitNumX = 2;
+            //根据地块数量添加
+            int splitNumX = 1;
             int heightSize = (int)terrains[0].terrainData.size.x;
             if (!Mathf.IsPowerOfTwo(heightSize))
             {

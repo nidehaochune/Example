@@ -210,8 +210,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 95735433}
-  m_LocalRotation: {x: -0.06708564, y: -0.31699944, z: 0.022478499, w: -0.9457831}
-  m_LocalPosition: {x: 49.47562, y: 136.77713, z: -955.9973}
+  m_LocalRotation: {x: -0.22406419, y: -0.2546569, z: 0.06081775, w: -0.9387472}
+  m_LocalPosition: {x: 2.6486664, y: 140.8681, z: -29.884277}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -232,9 +232,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   terrains:
   - {fileID: 916477360}
-  - {fileID: 1464926985}
-  - {fileID: 1816420463}
-  - {fileID: 1444779222}
   heightMap: {fileID: 0}
 --- !u!114 &95735438
 MonoBehaviour:
@@ -428,6 +425,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Terrain_A
       objectReference: {fileID: 0}
+    - target: {fileID: 5542900777551704045, guid: 80a25b3596c79c3469cefdec12b31546,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5542900777551704046, guid: 80a25b3596c79c3469cefdec12b31546,
         type: 3}
       propertyPath: m_RootOrder
@@ -507,6 +509,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Terrain_A (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 5542900777551704045, guid: 80a25b3596c79c3469cefdec12b31546,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5542900777551704046, guid: 80a25b3596c79c3469cefdec12b31546,
         type: 3}
       propertyPath: m_RootOrder
@@ -567,12 +574,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 80a25b3596c79c3469cefdec12b31546, type: 3}
---- !u!218 &1444779222 stripped
-Terrain:
-  m_CorrespondingSourceObject: {fileID: 5542900777551704047, guid: 80a25b3596c79c3469cefdec12b31546,
-    type: 3}
-  m_PrefabInstance: {fileID: 1444779221}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1464926984
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -585,6 +586,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Terrain_A (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5542900777551704045, guid: 80a25b3596c79c3469cefdec12b31546,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5542900777551704046, guid: 80a25b3596c79c3469cefdec12b31546,
         type: 3}
@@ -646,12 +652,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 80a25b3596c79c3469cefdec12b31546, type: 3}
---- !u!218 &1464926985 stripped
-Terrain:
-  m_CorrespondingSourceObject: {fileID: 5542900777551704047, guid: 80a25b3596c79c3469cefdec12b31546,
-    type: 3}
-  m_PrefabInstance: {fileID: 1464926984}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1816420462
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -664,6 +664,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Terrain_A (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5542900777551704045, guid: 80a25b3596c79c3469cefdec12b31546,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5542900777551704046, guid: 80a25b3596c79c3469cefdec12b31546,
         type: 3}
@@ -725,9 +730,3 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 80a25b3596c79c3469cefdec12b31546, type: 3}
---- !u!218 &1816420463 stripped
-Terrain:
-  m_CorrespondingSourceObject: {fileID: 5542900777551704047, guid: 80a25b3596c79c3469cefdec12b31546,
-    type: 3}
-  m_PrefabInstance: {fileID: 1816420462}
-  m_PrefabAsset: {fileID: 0}

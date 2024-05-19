@@ -107,7 +107,9 @@ Shader "Custom/Instance2"
                 InputData inputData = (InputData)0;
                 real3 albedo = SAMPLE_TEXTURE2D(_MainTex, samplerLinearClamp, i.uv);
                 half3 nrm = UnpackNormal(SAMPLE_TEXTURE2D(_NormapTex, samplerNormalLinearClamp, i.uv));
+
                 half3 normalTS = normalize(nrm.xyz);
+
                 half3 viewDirWS = half3(i.normal.w, i.tangent.w, i.bitangent.w);
                 inputData.tangentToWorld = half3x3(-i.tangent.xyz, i.bitangent.xyz, i.normal.xyz);
                 inputData.normalWS = TransformTangentToWorld(normalTS, inputData.tangentToWorld);
