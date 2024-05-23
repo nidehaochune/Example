@@ -40,7 +40,7 @@ Material:
     - _NormalScale: 0
     - _PrimaryShift: 0.1
     - _SecondaryShift: -0.1
-    - _Specular: 3.68
+    - _Specular: 5
     - _SpecularMultiplier: 200
     - _SpecularMultiplier2: 500
     m_Colors:
