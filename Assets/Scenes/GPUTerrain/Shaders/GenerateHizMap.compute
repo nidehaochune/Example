@@ -34,7 +34,7 @@ void GenerateHizMap(uint3 id : SV_DispatchThreadID, uint3 groupId : SV_GroupID, 
     float depth = SAMPLE_TEXTURE2D_LOD(_InputDepthTex, samplerLinearClamp, uv, 0);
     uint2 pix = uint2(idInGroup.xy);
     hiz_0[pix.x][pix.y] = depth;
-    GroupMemoryBarrierWithGroupSync();
+    GroupMemoryBarrierWithGroupSync();//阻止执行组中的所有线程，直到所有组共享访问都已完成，并且组中的所有线程都已到达此调用。
 
     pix = idInGroup.xy >> 1;
     uint2 lastPix = pix * 2;

@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AnoHair
+  m_Shader: {fileID: 4800000, guid: 83127bc3a054a46e0b35c4e29d487fdd, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AnioTex:
+        m_Texture: {fileID: 2800000, guid: 1e2c806d34d7e49debd14cf5ce915440, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: be5e26a17824247af9bf481575043007, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalTex:
+        m_Texture: {fileID: 2800000, guid: c2ac7b8d49d454b56a787b69cffb8cc0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _NormalScale: 0
+    - _PrimaryShift: 0.1
+    - _SecondaryShift: -0.1
+    - _Specular: 3.68
+    - _SpecularMultiplier: 200
+    - _SpecularMultiplier2: 500
+    m_Colors:
+    - _Color: {r: 0, g: 0, b: 0, a: 1}
+    - _SpecularColor: {r: 0.3372549, g: 0.3372549, b: 0.3372549, a: 1}
+    - _SpecularColor2: {r: 0.5568628, g: 0.5568628, b: 0.5568628, a: 1}
+  m_BuildTextureStacks: []
