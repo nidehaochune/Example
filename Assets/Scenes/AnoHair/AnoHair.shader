@@ -49,7 +49,7 @@ Shader "Unlit/AnoHair"
 				float4 TtoW2 : TEXCOORD3;
             };
 
-            			//获取头发高光
+            //获取头发高光
 			half StrandSpecular ( half3 T, half3 V, half3 L, half exponent)
 			{
 				half3 H = normalize(L + V);
@@ -118,7 +118,7 @@ Shader "Unlit/AnoHair"
 
                 half3 spec = SAMPLE_TEXTURE2D(_AnioTex,sampler_AnioTex,i.uv.xy);
             	half specTex = spec.g;
-							half3 t1 = ShiftTangent(worldBinormal, worldNormal, _PrimaryShift + specTex);
+				half3 t1 = ShiftTangent(worldBinormal, worldNormal, _PrimaryShift + specTex);
 				half3 t2 = ShiftTangent(worldBinormal, worldNormal, _SecondaryShift + specTex);
 				//计算高光强度
 				half3 spec1 = StrandSpecular(t1, worldViewDir, worldLightDir, _SpecularMultiplier)* _SpecularColor;
