@@ -109,7 +109,7 @@ public class TerrainGPUDriven
 
     public void InitTerrain(int terrainSize)
     {
-        _gValue._TerrainSize = terrainSize;
+        _gValue._TerrainSize = terrainSize;//heightMap.width
         _mesh = CreateQuardMesh(_gValue._PerPacthSize, 1f);
         _argArr[0] = (uint)_mesh.GetIndexCount(subMeshIndex);
         _argArr[2] = (uint)_mesh.GetIndexStart(subMeshIndex);

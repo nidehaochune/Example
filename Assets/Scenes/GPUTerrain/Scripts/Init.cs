@@ -35,6 +35,7 @@ public class Init : MonoBehaviour
 
             var realHeightSize = Mathf.NextPowerOfTwo(heightSize);
             int totalHeightSize = realHeightSize * terrainNum / splitNumX;
+            Debug.LogError("totalHeightSize ="+totalHeightSize);
             float[] pixelData = new float[totalHeightSize * totalHeightSize];
             heightMap = new Texture2D(totalHeightSize, totalHeightSize, TextureFormat.RFloat, false);
             maxHeight = terrains[0].terrainData.heightmapScale.y;
