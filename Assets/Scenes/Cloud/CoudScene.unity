@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18386883, g: 0.22901513, b: 0.30310285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18386951, g: 0.22901587, b: 0.30310383, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -265,7 +265,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 114812755}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
   m_Name: 
@@ -371,9 +371,7 @@ MonoBehaviour:
   m_BeforeStackBundles:
   - assemblyQualifiedName: RayMarchingCloud, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  m_AfterStackBundles:
-  - assemblyQualifiedName: UnityEngine.Rendering.PostProcessing.CrepuscularRays,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_AfterStackBundles: []
 --- !u!81 &156679063
 AudioListener:
   m_ObjectHideFlags: 0
@@ -414,7 +412,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 2000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -440,8 +438,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 156679060}
-  m_LocalRotation: {x: -0.12588574, y: 0.84342116, z: 0.23602997, w: 0.4659221}
-  m_LocalPosition: {x: -639.1, y: -24.4, z: 322.3}
+  m_LocalRotation: {x: 0.08711318, y: 0.8797362, z: -0.1767072, w: 0.43272412}
+  m_LocalPosition: {x: -425.64252, y: 253.06201, z: 383.4631}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -635,7 +633,7 @@ Transform:
   m_GameObject: {fileID: 1040546295}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 22.3, y: 20.1, z: 108.7}
-  m_LocalScale: {x: 1472.57, y: 36.8368, z: 1050.0724}
+  m_LocalScale: {x: 1472.57, y: 322.93, z: 1050.0724}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
