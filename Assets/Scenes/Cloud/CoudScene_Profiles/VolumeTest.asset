@@ -21,7 +21,11 @@ MonoBehaviour:
     value: 0
   LightColour:
     overrideState: 1
-    value: {r: 1.33, g: 0.98, b: 0.69, a: 1}
+    value:
+      r: 1.33
+      g: 0.98
+      b: 0.69
+      a: 1
   RayRange:
     overrideState: 1
     value: 0.94
@@ -61,7 +65,6 @@ MonoBehaviour:
   settings:
   - {fileID: 7704706169029784853}
   - {fileID: 4629348744847354266}
-  - {fileID: -6840618782247199402}
 --- !u!114 &114552632637747206
 MonoBehaviour:
   m_ObjectHideFlags: 3

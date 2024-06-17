@@ -6,6 +6,7 @@ using System.Diagnostics;
 using UnityEngine;
 // using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
+using Debug = UnityEngine.Debug;
 
 [Serializable]
 [PostProcess(typeof(RayMarchingCloudRenderer), PostProcessEvent.BeforeStack, "Custom/RayMarchingCloud")]
@@ -76,6 +77,7 @@ public sealed class RayMarchingCloudRenderer : PostProcessEffectRenderer<RayMarc
     }
     public override void Render(PostProcessRenderContext context)
     {
+        Debug.Log("Render");
         var sheet = context.propertySheets.Get(Shader.Find("Hidden/Custom/RayMarchingCloud"));
         //sheet.properties.SetColor(Shader.PropertyToID("_color"), settings.color);
          
