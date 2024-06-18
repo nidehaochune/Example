@@ -37,7 +37,7 @@ MonoBehaviour:
   shapeNoiseWeights: {x: 4.63, y: 19.9, z: -3.18, w: -18.4}
   detailWeights: 2.06
   detailNoiseWeight: 6.4
-  xy_Speed_zw_Warp: {x: 0, y: 0, z: 0, w: 0}
+  xy_Speed_zw_Warp: {x: 0.03, y: 0.2, z: 0, w: 8}
   Material: {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -56,11 +56,10 @@ MonoBehaviour:
       type: 3}
     hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
   m_RendererFeatures:
-  - {fileID: -8712525699046461375}
   - {fileID: 3703267761612489948}
   - {fileID: 5206027787815393454}
-  - {fileID: 2902828699799052515}
-  m_RendererFeatureMap: 41b0dfa309e41687dc84118f68a66433ae988cb7b0863f48e3e0549752eb4828
+  - {fileID: -8712525699046461375}
+  m_RendererFeatureMap: dc84118f68a66433ae988cb7b0863f4841b0dfa309e41687
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}

@@ -59,7 +59,10 @@ public class CloudFeature : ScriptableRendererFeature
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
+            
             CommandBuffer cmd = CommandBufferPool.Get();
+            // using (new ProfilingScope(cmd, m_ProfilingSampler))
+            // {
             // MaterialPropertyBlock mpb = new MaterialPropertyBlock();
             Matrix4x4 projectionMatrix = GL.GetGPUProjectionMatrix(renderingData.cameraData.camera.projectionMatrix, false);
             cmd.SetGlobalMatrix(Shader.PropertyToID("_InverseProjectionMatrix"), projectionMatrix.inverse);
@@ -141,53 +144,49 @@ public class CloudFeature : ScriptableRendererFeature
             scaleMatrix = new Vector3(1 / scaleMatrix.x, 1 / scaleMatrix.y, 1 / scaleMatrix.z);
             Matrix4x4 TRSMatrix = Matrix4x4.TRS(cloudTransform.position, rotation, scaleMatrix);
             cmd.SetGlobalMatrix(Shader.PropertyToID("_TRSMatrix"), TRSMatrix);
-            using (new ProfilingScope(cmd, m_ProfilingSampler))
-            {
+      
                 
                 //降深度采样
                 var DownsampleDepthID = Shader.PropertyToID("_DownsampleTemp");
-                // RenderTargetIdentifier dsID = DownsampleDepthID;
                 cmd.GetTemporaryRT(DownsampleDepthID,renderingData.cameraData.cameraTargetDescriptor,FilterMode.Bilinear);
-
-                // cmd.GetTemporaryRT(cmd, DownsampleDepthID, 0, TextureFormat.RGBA64, RenderTextureReadWrite.Default, FilterMode.Point, width / m_FeatureSetting.Downsample, height / m_FeatureSetting.Downsample);
-                BlitFullscreenTriangle(cmd,DownsampleDepthID, DownsampleDepthID, 1);
-                
-                // cmd.SetRenderTarget(DownsampleDepthID, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store,
-                // RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store);
-                // cmd.ClearRenderTarget(true, true, Color.clear);
-                cmd.DrawMesh(fullscreenTriangle, Matrix4x4.identity,  m_Material, 0, 2);
-                // cmd.BlitFullscreenTriangle();
-                // cmd.Blit();
+                BlitFullscreenTriangle(cmd,renderingData.cameraData.renderer.cameraColorTargetHandle, DownsampleDepthID, 1);
+                cmd.SetGlobalTexture(Shader.PropertyToID("_LowDepthTexture"), DownsampleDepthID);
 
 
-                // cmd.SetGlobalTexture(Shader.PropertyToID("_LowDepthTexture"), DownsampleDepthID);
                 // //降cloud分辨率 并使用第1个pass 渲染云
-                // var DownsampleColorID = Shader.PropertyToID("_DownsampleColor");
-                // cmd.GetTemporaryRT( DownsampleColorID,renderingData.cameraData.cameraTargetDescriptor,FilterMode.Bilinear);
-                // cmd.BlitFullscreenTriangle(context.source, DownsampleColorID, sheet,0);
-                //
+                var DownsampleColorID = Shader.PropertyToID("_DownsampleColor");
+
+                cmd.GetTemporaryRT( DownsampleColorID,renderingData.cameraData.cameraTargetDescriptor,FilterMode.Bilinear);
+                BlitFullscreenTriangle(cmd,DownsampleDepthID, DownsampleColorID, 0);
+
                 // //降分辨率后的云设置回_DownsampleColor
-                // cmd.SetGlobalTexture(Shader.PropertyToID("_DownsampleColor"), DownsampleColorID);
-                //
+                cmd.SetGlobalTexture(Shader.PropertyToID("_DownsampleColor"), DownsampleColorID);
+                BlitFullscreenTriangle(cmd, DownsampleColorID,renderingData.cameraData.renderer.cameraColorTargetHandle, 2);
+
+                context.ExecuteCommandBuffer(cmd);
+                
                 // //使用第0个Pass 合成
                 // context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 2);
-                cmd.Blit(DownsampleDepthID,renderingData.cameraData.renderer.cameraColorTargetHandle);
-                // cmd.ReleaseTemporaryRT(DownsampleColorID);
+                // cmd.Blit(DownsampleColorID,renderingData.cameraData.renderer.cameraColorTargetHandle);
+       
+                cmd.ReleaseTemporaryRT(DownsampleColorID);
                 cmd.ReleaseTemporaryRT(DownsampleDepthID);
+                cmd.Clear();
+                // cmd.Release();
+                CommandBufferPool.Release(cmd);
+            // }
 
-            }
-  
         }
         public void MBlitFullscreenTriangle(CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier destination, int pass, RenderBufferLoadAction loadAction, Rect? viewport = null, bool preserveDepth = false)
         {
             cmd.SetGlobalTexture(Shader.PropertyToID("_MainTex"), source);
-#if UNITY_2018_2_OR_NEWER
+// #if UNITY_2018_2_OR_NEWER
             bool clear = (loadAction == RenderBufferLoadAction.Clear);
             if (clear)
                 loadAction = RenderBufferLoadAction.DontCare;
-#else
-            bool clear = false;
-#endif
+// #else
+//             bool clear = false;
+// #endif
             if (viewport != null)
                 loadAction = RenderBufferLoadAction.Load;
 
@@ -257,18 +256,18 @@ public class CloudFeature : ScriptableRendererFeature
 
     private GameObject findCloudBox;
     private Transform cloudTransform;
-    public Material Material;
+    private Material Material;
+
     /// <inheritdoc/>
     public override void Create()
     {
         // cloudSetting = new CloudSetting();
         m_ScriptablePass = new RayMarchingCloudPass();
-        m_ScriptablePass.cloudTransform = this.cloudTransform;
         m_ScriptablePass.m_FeatureSetting = this;
         Material = new Material(Shader.Find("Hidden/Custom/RayMarchingCloud"));
         m_ScriptablePass.m_Material = Material;
         // Configures where the render pass should be injected.
-        m_ScriptablePass.renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
+        m_ScriptablePass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
     }
 
     // Here you can inject one or multiple render passes in the renderer.
@@ -279,6 +278,8 @@ public class CloudFeature : ScriptableRendererFeature
         if (findCloudBox != null)
         {
             cloudTransform = findCloudBox.GetComponent<Transform>();
+            m_ScriptablePass.cloudTransform = this.cloudTransform;
+
             renderer.EnqueuePass(m_ScriptablePass);
         }
         else
