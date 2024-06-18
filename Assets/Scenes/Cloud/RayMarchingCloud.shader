@@ -265,10 +265,10 @@
             float4 FragCombine(VaryingsDefault i) : SV_Target
             {
                 float4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord);
-                float4 cloudColor = SAMPLE_TEXTURE2D(_DownsampleColor, sampler_DownsampleColor, i.texcoord);
-
-                color.rgb *= cloudColor.a;
-                color.rgb += cloudColor.rgb;
+                // float4 cloudColor = SAMPLE_TEXTURE2D(_DownsampleColor, sampler_DownsampleColor, i.texcoord);
+                //
+                // color.rgb *= cloudColor.a;
+                // color.rgb += cloudColor.rgb;
                 return color;
             }
 

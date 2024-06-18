@@ -177,8 +177,7 @@ public sealed class RayMarchingCloudRenderer : PostProcessEffectRenderer<RayMarc
 
         //降分辨率后的云设置回_DownsampleColor
         cmd.SetGlobalTexture(Shader.PropertyToID("_DownsampleColor"), DownsampleColorID);
-
-        //使用第0个Pass 合成
+        //使用第2个Pass 合成
         context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 2);
 
         cmd.ReleaseTemporaryRT(DownsampleColorID);

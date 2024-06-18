@@ -148,26 +148,26 @@ public class CloudFeature : ScriptableRendererFeature
                 
                 //降深度采样
                 var DownsampleDepthID = Shader.PropertyToID("_DownsampleTemp");
-                cmd.GetTemporaryRT(DownsampleDepthID,renderingData.cameraData.cameraTargetDescriptor,FilterMode.Bilinear);
+                cmd.GetTemporaryRT(DownsampleDepthID,renderingData.cameraData.cameraTargetDescriptor,FilterMode.Point);
                 BlitFullscreenTriangle(cmd,renderingData.cameraData.renderer.cameraColorTargetHandle, DownsampleDepthID, 1);
                 cmd.SetGlobalTexture(Shader.PropertyToID("_LowDepthTexture"), DownsampleDepthID);
 
 
                 // //降cloud分辨率 并使用第1个pass 渲染云
                 var DownsampleColorID = Shader.PropertyToID("_DownsampleColor");
-
                 cmd.GetTemporaryRT( DownsampleColorID,renderingData.cameraData.cameraTargetDescriptor,FilterMode.Bilinear);
                 BlitFullscreenTriangle(cmd,DownsampleDepthID, DownsampleColorID, 0);
 
                 // //降分辨率后的云设置回_DownsampleColor
                 cmd.SetGlobalTexture(Shader.PropertyToID("_DownsampleColor"), DownsampleColorID);
+                // //使用第2个Pass 合成
                 BlitFullscreenTriangle(cmd, DownsampleColorID,renderingData.cameraData.renderer.cameraColorTargetHandle, 2);
+                
+                // cmd.Blit(DownsampleColorID,renderingData.cameraData.renderer.cameraColorTargetHandle);
 
                 context.ExecuteCommandBuffer(cmd);
                 
-                // //使用第0个Pass 合成
                 // context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 2);
-                // cmd.Blit(DownsampleColorID,renderingData.cameraData.renderer.cameraColorTargetHandle);
        
                 cmd.ReleaseTemporaryRT(DownsampleColorID);
                 cmd.ReleaseTemporaryRT(DownsampleDepthID);
@@ -180,13 +180,10 @@ public class CloudFeature : ScriptableRendererFeature
         public void MBlitFullscreenTriangle(CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier destination, int pass, RenderBufferLoadAction loadAction, Rect? viewport = null, bool preserveDepth = false)
         {
             cmd.SetGlobalTexture(Shader.PropertyToID("_MainTex"), source);
-// #if UNITY_2018_2_OR_NEWER
             bool clear = (loadAction == RenderBufferLoadAction.Clear);
             if (clear)
                 loadAction = RenderBufferLoadAction.DontCare;
-// #else
-//             bool clear = false;
-// #endif
+
             if (viewport != null)
                 loadAction = RenderBufferLoadAction.Load;
 
@@ -209,11 +206,6 @@ public class CloudFeature : ScriptableRendererFeature
             
         }
 
-        // Cleanup any allocated resources that were created during the execution of this render pass.
-        public override void OnCameraCleanup(CommandBuffer cmd)
-        {
-            
-        }
     }
 
     RayMarchingCloudPass m_ScriptablePass;
