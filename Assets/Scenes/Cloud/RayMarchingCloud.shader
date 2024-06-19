@@ -32,6 +32,7 @@
             TEXTURE2D_SAMPLER2D(_LowDepthTexture, sampler_LowDepthTexture);
             TEXTURE2D_SAMPLER2D(_DownsampleColor, sampler_DownsampleColor);
 			TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex);
+			TEXTURE2D_SAMPLER2D(_MainTex2, sampler_MainTex2);
 
             float4 _CameraDepthTexture_TexelSize;
 
@@ -265,10 +266,10 @@
             float4 FragCombine(VaryingsDefault i) : SV_Target
             {
                 float4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord);
-                // float4 cloudColor = SAMPLE_TEXTURE2D(_DownsampleColor, sampler_DownsampleColor, i.texcoord);
-                //
-                // color.rgb *= cloudColor.a;
-                // color.rgb += cloudColor.rgb;
+                float4 cloudColor = SAMPLE_TEXTURE2D(_DownsampleColor, sampler_DownsampleColor, i.texcoord);
+                
+                color.rgb *= cloudColor.a;
+                color.rgb += cloudColor.rgb;
                 return color;
             }
 
