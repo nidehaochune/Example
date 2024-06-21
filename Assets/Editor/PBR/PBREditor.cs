@@ -6,9 +6,9 @@ namespace UnityEditor.Rendering.Universal.ShaderGUI
 {
     public class PBRShader : BaseShaderGUI
     {
-        static readonly string[] workflowModeNames = Enum.GetNames(typeof(LitGUI.WorkflowMode));
+        static readonly string[] workflowModeNames = Enum.GetNames(typeof(PBRLitGUI.WorkflowMode));
 
-        private LitGUI.LitProperties litProperties;
+        private PBRLitGUI.LitProperties litProperties;
         private PBRDetailGUI.LitProperties litDetailProperties;
 
         public override void FillAdditionalFoldouts(MaterialHeaderScopeList materialScopesList)
@@ -20,14 +20,14 @@ namespace UnityEditor.Rendering.Universal.ShaderGUI
         public override void FindProperties(MaterialProperty[] properties)
         {
             base.FindProperties(properties);
-            litProperties = new LitGUI.LitProperties(properties);
+            litProperties = new PBRLitGUI.LitProperties(properties);
             litDetailProperties = new PBRDetailGUI.LitProperties(properties);
         }
 
         // material changed check
         public override void ValidateMaterial(Material material)
         {
-            SetMaterialKeywords(material, LitGUI.SetMaterialKeywords, PBRDetailGUI.SetMaterialKeywords);
+            SetMaterialKeywords(material, PBRLitGUI.SetMaterialKeywords, PBRDetailGUI.SetMaterialKeywords);
         }
 
         // material main surface options
@@ -37,7 +37,7 @@ namespace UnityEditor.Rendering.Universal.ShaderGUI
             EditorGUIUtility.labelWidth = 0f;
 
             if (litProperties.workflowMode != null)
-                DoPopup(LitGUI.Styles.workflowModeText, litProperties.workflowMode, workflowModeNames);
+                DoPopup(PBRLitGUI.Styles.workflowModeText, litProperties.workflowMode, workflowModeNames);
 
             base.DrawSurfaceOptions(material);
         }
@@ -46,7 +46,7 @@ namespace UnityEditor.Rendering.Universal.ShaderGUI
         public override void DrawSurfaceInputs(Material material)
         {
             base.DrawSurfaceInputs(material);
-            LitGUI.Inputs(litProperties, materialEditor, material);
+            PBRLitGUI.Inputs(litProperties, materialEditor, material);
             DrawEmissionProperties(material, true);
             DrawTileOffset(materialEditor, baseMapProp);
         }
@@ -56,8 +56,8 @@ namespace UnityEditor.Rendering.Universal.ShaderGUI
         {
             if (litProperties.reflections != null && litProperties.highlights != null)
             {
-                materialEditor.ShaderProperty(litProperties.highlights, LitGUI.Styles.highlightsText);
-                materialEditor.ShaderProperty(litProperties.reflections, LitGUI.Styles.reflectionsText);
+                materialEditor.ShaderProperty(litProperties.highlights, PBRLitGUI.Styles.highlightsText);
+                materialEditor.ShaderProperty(litProperties.reflections, PBRLitGUI.Styles.reflectionsText);
             }
 
             base.DrawAdvancedOptions(material);
@@ -109,16 +109,17 @@ namespace UnityEditor.Rendering.Universal.ShaderGUI
                 material.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
             }
 
+
             if (oldShader.name.Equals("Standard (Specular setup)"))
             {
-                material.SetFloat("_WorkflowMode", (float)LitGUI.WorkflowMode.Specular);
+                material.SetFloat("_WorkflowMode", (float)PBRLitGUI.WorkflowMode.Specular);
                 Texture texture = material.GetTexture("_SpecGlossMap");
                 if (texture != null)
                     material.SetTexture("_MetallicSpecGlossMap", texture);
             }
             else
             {
-                material.SetFloat("_WorkflowMode", (float)LitGUI.WorkflowMode.Metallic);
+                material.SetFloat("_WorkflowMode", (float)PBRLitGUI.WorkflowMode.Metallic);
                 Texture texture = material.GetTexture("_MetallicGlossMap");
                 if (texture != null)
                     material.SetTexture("_MetallicSpecGlossMap", texture);

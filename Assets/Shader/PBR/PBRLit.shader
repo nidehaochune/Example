@@ -33,6 +33,8 @@ Shader "PBR/Lit"
 
         [HDR] _EmissionColor("Color", Color) = (0,0,0)
         _EmissionMap("Emission", 2D) = "white" {}
+        
+        _SSSMap("SSS Toggle", Float) = 0
 
         _DetailMask("Detail Mask", 2D) = "white" {}
         _DetailAlbedoMapScale("Scale", Range(0.0, 2.0)) = 1.0
@@ -130,6 +132,8 @@ Shader "PBR/Lit"
             #pragma shader_feature_local_fragment _SPECULARHIGHLIGHTS_OFF
             #pragma shader_feature_local_fragment _ENVIRONMENTREFLECTIONS_OFF
             #pragma shader_feature_local_fragment _SPECULAR_SETUP
+
+            #pragma  multi_compile_fragment _ _SSS
 
             // -------------------------------------
             // Universal Pipeline keywords
