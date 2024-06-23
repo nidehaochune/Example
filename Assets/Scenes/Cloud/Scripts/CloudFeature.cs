@@ -8,7 +8,7 @@ using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 using ProfilingScope = UnityEngine.Rendering.ProfilingScope;
 
-enum MyEnum
+internal enum MyEnum
 {
     Cloud,
     Blend
@@ -16,11 +16,11 @@ enum MyEnum
 
 public class CloudFeature : ScriptableRendererFeature
 {
-    class RayMarchingCloudPass : ScriptableRenderPass
+    private class RayMarchingCloudPass : ScriptableRenderPass
     {
         // public Shader m_cloudShader;
         public Transform cloudTransform;
-        static Mesh s_FullscreenTriangle;
+        private static Mesh s_FullscreenTriangle;
 
         // public 
         public CloudFeature m_FeatureSetting;
@@ -39,9 +39,9 @@ public class CloudFeature : ScriptableRendererFeature
                 // this directly in the vertex shader using vertex ids :(
                 s_FullscreenTriangle.SetVertices(new List<Vector3>
                 {
-                    new Vector3(-1f, -1f, 0f),
-                    new Vector3(-1f, 3f, 0f),
-                    new Vector3(3f, -1f, 0f)
+                    new(-1f, -1f, 0f),
+                    new(-1f, 3f, 0f),
+                    new(3f, -1f, 0f)
                 });
                 s_FullscreenTriangle.SetIndices(new[] { 0, 1, 2 }, MeshTopology.Triangles, 0, false);
                 s_FullscreenTriangle.UploadMeshData(false);
@@ -50,139 +50,149 @@ public class CloudFeature : ScriptableRendererFeature
             }
         }
 
-        private ProfilingSampler m_ProfilingSampler = ProfilingSampler.Get(MyEnum.Cloud);
+        private Vector3 boundsMin;
+        private Vector3 boundsMax;
 
-
-        Vector3 boundsMin;
-        Vector3 boundsMax;
+        private RTHandle _DownSampleDepthHandle;
+        private RTHandle _DownSampleColorHandle;
 
         public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
         {
+            UpdateMaterial(cmd, ref renderingData);
+            RenderingUtils.ReAllocateIfNeeded(
+                ref _DownSampleDepthHandle,
+                renderingData.cameraData.cameraTargetDescriptor,
+                FilterMode.Point,
+                TextureWrapMode.Clamp,
+                false, 1, 0,
+                "_LowDepthTexture");
+            RenderingUtils.ReAllocateIfNeeded(
+                ref _DownSampleColorHandle,
+                renderingData.cameraData.cameraTargetDescriptor,
+                FilterMode.Bilinear,
+                TextureWrapMode.Clamp,
+                false, 1, 0,
+                "_DownsampleColor");
         }
 
-        public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+        private void UpdateMaterial(CommandBuffer cmd, ref RenderingData renderingData)
         {
-            CommandBuffer cmd = CommandBufferPool.Get();
-            // using (new ProfilingScope(cmd, m_ProfilingSampler))
-            // {
-            // MaterialPropertyBlock mpb = new MaterialPropertyBlock();
-            Matrix4x4 projectionMatrix =
+            var projectionMatrix =
                 GL.GetGPUProjectionMatrix(renderingData.cameraData.camera.projectionMatrix, false);
-            cmd.SetGlobalMatrix(Shader.PropertyToID("_InverseProjectionMatrix"), projectionMatrix.inverse);
-            cmd.SetGlobalMatrix(Shader.PropertyToID("_InverseViewMatrix"),
+            m_Material.SetMatrix(Shader.PropertyToID("_InverseProjectionMatrix"), projectionMatrix.inverse);
+            m_Material.SetMatrix(Shader.PropertyToID("_InverseViewMatrix"),
                 renderingData.cameraData.camera.cameraToWorldMatrix);
-            cmd.SetGlobalVector(Shader.PropertyToID("_CameraDir"), renderingData.cameraData.camera.transform.forward);
+            m_Material.SetVector(Shader.PropertyToID("_CameraDir"), renderingData.cameraData.camera.transform.forward);
 
             if (cloudTransform != null)
             {
                 boundsMin = cloudTransform.position - cloudTransform.localScale / 2;
                 boundsMax = cloudTransform.position + cloudTransform.localScale / 2;
-                cmd.SetGlobalVector(Shader.PropertyToID("_boundsMin"), boundsMin);
-                cmd.SetGlobalVector(Shader.PropertyToID("_boundsMax"), boundsMax);
+                m_Material.SetVector(Shader.PropertyToID("_boundsMin"), boundsMin);
+                m_Material.SetVector(Shader.PropertyToID("_boundsMax"), boundsMax);
             }
             // m_Feature
 
             if (m_FeatureSetting.cloud3D != null)
-            {
-                cmd.SetGlobalTexture(Shader.PropertyToID("_noiseTex"), m_FeatureSetting.cloud3D);
-            }
+                m_Material.SetTexture(Shader.PropertyToID("_noiseTex"), m_FeatureSetting.cloud3D);
 
             if (m_FeatureSetting.noiseDetail3D != null)
-            {
-                cmd.SetGlobalTexture(Shader.PropertyToID("_noiseDetail3D"), m_FeatureSetting.noiseDetail3D);
-            }
+                m_Material.SetTexture(Shader.PropertyToID("_noiseDetail3D"), m_FeatureSetting.noiseDetail3D);
 
             if (m_FeatureSetting.weatherMap != null)
-            {
-                cmd.SetGlobalTexture(Shader.PropertyToID("_weatherMap"), m_FeatureSetting.weatherMap);
-            }
+                m_Material.SetTexture(Shader.PropertyToID("_weatherMap"), m_FeatureSetting.weatherMap);
 
             if (m_FeatureSetting.maskNoise != null)
-            {
-                cmd.SetGlobalTexture(Shader.PropertyToID("_maskNoise"), m_FeatureSetting.maskNoise);
-            }
+                m_Material.SetTexture(Shader.PropertyToID("_maskNoise"), m_FeatureSetting.maskNoise);
 
             float width = renderingData.cameraData.cameraTargetDescriptor.width;
             float height = renderingData.cameraData.cameraTargetDescriptor.width;
 
             if (m_FeatureSetting.blueNoise != null)
             {
-                Vector4 screenUv = new Vector4(
+                var screenUv = new Vector4(
                     width / (float)m_FeatureSetting.blueNoise.width,
                     height / (float)m_FeatureSetting.blueNoise.height, 0, 0);
-                cmd.SetGlobalVector(Shader.PropertyToID("_BlueNoiseCoords"), screenUv);
-                cmd.SetGlobalTexture(Shader.PropertyToID("_BlueNoise"), m_FeatureSetting.blueNoise);
+                m_Material.SetVector(Shader.PropertyToID("_BlueNoiseCoords"), screenUv);
+                m_Material.SetTexture(Shader.PropertyToID("_BlueNoise"), m_FeatureSetting.blueNoise);
             }
 
-            cmd.SetGlobalFloat(Shader.PropertyToID("_shapeTiling"), m_FeatureSetting.shapeTiling);
-            cmd.SetGlobalFloat(Shader.PropertyToID("_detailTiling"), m_FeatureSetting.detailTiling);
+            m_Material.SetFloat(Shader.PropertyToID("_shapeTiling"), m_FeatureSetting.shapeTiling);
+            m_Material.SetFloat(Shader.PropertyToID("_detailTiling"), m_FeatureSetting.detailTiling);
 
-            cmd.SetGlobalFloat(Shader.PropertyToID("_step"), m_FeatureSetting.step);
-            cmd.SetGlobalFloat(Shader.PropertyToID("_rayStep"), m_FeatureSetting.rayStep);
+            m_Material.SetFloat(Shader.PropertyToID("_step"), m_FeatureSetting.step);
+            m_Material.SetFloat(Shader.PropertyToID("_rayStep"), m_FeatureSetting.rayStep);
 
             //cmd.SetGlobalFloat(Shader.PropertyToID("_dstTravelled"),m_FeatureSetting.dstTravelled );
-            cmd.SetGlobalFloat(Shader.PropertyToID("_densityOffset"), m_FeatureSetting.densityOffset);
-            cmd.SetGlobalFloat(Shader.PropertyToID("_densityMultiplier"), m_FeatureSetting.densityMultiplier);
+            m_Material.SetFloat(Shader.PropertyToID("_densityOffset"), m_FeatureSetting.densityOffset);
+            m_Material.SetFloat(Shader.PropertyToID("_densityMultiplier"), m_FeatureSetting.densityMultiplier);
 
 
             //cmd.SetInt(Shader.PropertyToID("_numStepsLight"), (int)m_FeatureSetting.numStepsLight );
 
-            cmd.SetGlobalColor(Shader.PropertyToID("_colA"), m_FeatureSetting.colA);
-            cmd.SetGlobalColor(Shader.PropertyToID("_colB"), m_FeatureSetting.colB);
-            cmd.SetGlobalFloat(Shader.PropertyToID("_colorOffset1"), m_FeatureSetting.colorOffset1);
-            cmd.SetGlobalFloat(Shader.PropertyToID("_colorOffset2"), m_FeatureSetting.colorOffset2);
-            cmd.SetGlobalFloat(Shader.PropertyToID("_lightAbsorptionTowardSun"),
+            m_Material.SetColor(Shader.PropertyToID("_colA"), m_FeatureSetting.colA);
+            m_Material.SetColor(Shader.PropertyToID("_colB"), m_FeatureSetting.colB);
+            m_Material.SetFloat(Shader.PropertyToID("_colorOffset1"), m_FeatureSetting.colorOffset1);
+            m_Material.SetFloat(Shader.PropertyToID("_colorOffset2"), m_FeatureSetting.colorOffset2);
+            m_Material.SetFloat(Shader.PropertyToID("_lightAbsorptionTowardSun"),
                 m_FeatureSetting.lightAbsorptionTowardSun);
-            cmd.SetGlobalFloat(Shader.PropertyToID("_lightAbsorptionThroughCloud"),
+            m_Material.SetFloat(Shader.PropertyToID("_lightAbsorptionThroughCloud"),
                 m_FeatureSetting.lightAbsorptionThroughCloud);
 
+            m_Material.SetFloat(Shader.PropertyToID("_rayOffsetStrength"), m_FeatureSetting.rayOffsetStrength);
+            m_Material.SetVector(Shader.PropertyToID("_phaseParams"), m_FeatureSetting.phaseParams);
+            m_Material.SetVector(Shader.PropertyToID("_xy_Speed_zw_Warp"), m_FeatureSetting.xy_Speed_zw_Warp);
+            m_Material.SetVector(Shader.PropertyToID("_shapeNoiseWeights"), m_FeatureSetting.shapeNoiseWeights);
+            m_Material.SetFloat(Shader.PropertyToID("_heightWeights"), m_FeatureSetting.heightWeights);
+            m_Material.SetFloat(Shader.PropertyToID("_detailWeights"), m_FeatureSetting.detailWeights);
+            m_Material.SetFloat(Shader.PropertyToID("_detailNoiseWeight"), m_FeatureSetting.detailNoiseWeight);
 
-            cmd.SetGlobalFloat(Shader.PropertyToID("_rayOffsetStrength"), m_FeatureSetting.rayOffsetStrength);
-            cmd.SetGlobalVector(Shader.PropertyToID("_phaseParams"), m_FeatureSetting.phaseParams);
-            cmd.SetGlobalVector(Shader.PropertyToID("_xy_Speed_zw_Warp"), m_FeatureSetting.xy_Speed_zw_Warp);
-
-            cmd.SetGlobalVector(Shader.PropertyToID("_shapeNoiseWeights"), m_FeatureSetting.shapeNoiseWeights);
-            cmd.SetGlobalFloat(Shader.PropertyToID("_heightWeights"), m_FeatureSetting.heightWeights);
-
-
-            cmd.SetGlobalFloat(Shader.PropertyToID("_detailWeights"), m_FeatureSetting.detailWeights);
-            cmd.SetGlobalFloat(Shader.PropertyToID("_detailNoiseWeight"), m_FeatureSetting.detailNoiseWeight);
-
-            Quaternion rotation = Quaternion.Euler(cloudTransform.eulerAngles);
-            Vector3 scaleMatrix = cloudTransform.localScale * 0.1f;
+            var rotation = Quaternion.Euler(cloudTransform.eulerAngles);
+            var scaleMatrix = cloudTransform.localScale * 0.1f;
             scaleMatrix = new Vector3(1 / scaleMatrix.x, 1 / scaleMatrix.y, 1 / scaleMatrix.z);
-            Matrix4x4 TRSMatrix = Matrix4x4.TRS(cloudTransform.position, rotation, scaleMatrix);
+            var TRSMatrix = Matrix4x4.TRS(cloudTransform.position, rotation, scaleMatrix);
             cmd.SetGlobalMatrix(Shader.PropertyToID("_TRSMatrix"), TRSMatrix);
+        }
 
-            RenderTargetIdentifier currentTarget = renderingData.cameraData.renderer.cameraColorTargetHandle;
+        public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+        {
+            var cmd = CommandBufferPool.Get();
+            var currentTarget = renderingData.cameraData.renderer.cameraColorTargetHandle;
             //降深度采样
-
-            var DownsampleDepthID = Shader.PropertyToID("_DownsampleTemp");
+            var DownsampleDepthID = Shader.PropertyToID("_LowDepthTexture");
             cmd.GetTemporaryRT(DownsampleDepthID, renderingData.cameraData.cameraTargetDescriptor, FilterMode.Point);
             BlitFullscreenTriangle(cmd, renderingData.cameraData.renderer.cameraColorTargetHandle, DownsampleDepthID,
-                1);
-            cmd.SetGlobalTexture(Shader.PropertyToID("_LowDepthTexture"), DownsampleDepthID);
-
-
+                0);
+            
             // //降cloud分辨率 并使用第1个pass 渲染云
             var DownsampleColorID = Shader.PropertyToID("_DownsampleColor");
             cmd.GetTemporaryRT(DownsampleColorID, renderingData.cameraData.cameraTargetDescriptor, FilterMode.Bilinear);
-            BlitFullscreenTriangle(cmd, DownsampleDepthID, DownsampleColorID, 0);
-
-            // //降分辨率后的云设置回_DownsampleColor
-            cmd.SetGlobalTexture(Shader.PropertyToID("_DownsampleColor"), DownsampleColorID);
+            BlitFullscreenTriangle(cmd, DownsampleDepthID, DownsampleColorID, 1);
+            
             // //使用第2个Pass 合成
-            cmd.SetGlobalTexture(Shader.PropertyToID("_MainTex"), currentTarget);
+            // cmd.SetGlobalTexture(Shader.PropertyToID("_MainTex"), currentTarget);
             BlitFullscreenTriangle(cmd, DownsampleColorID, currentTarget, 2);
-
+            
             // cmd.Blit(DownsampleColorID,renderingData.cameraData.renderer.cameraColorTargetHandle);
+            
+            
+            // cmd.SetGlobalTexture(Shader.PropertyToID("_LowDepthTexture"), _DownSampleDepthHandle.name);
+            //
+            // Blitter.BlitCameraTexture(cmd, currentTarget, _DownSampleDepthHandle, m_Material, 1);
+            //
+            //
+            // Blitter.BlitCameraTexture(cmd, _DownSampleDepthHandle, _DownSampleColorHandle, m_Material, 0);
+            // cmd.SetGlobalTexture(Shader.PropertyToID("_DownsampleColor"), _DownSampleColorHandle);
+            //
+            // Blitter.BlitCameraTexture(cmd, _DownSampleColorHandle, currentTarget, m_Material, 2);
+
 
             context.ExecuteCommandBuffer(cmd);
 
             // context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 2);
 
-            cmd.ReleaseTemporaryRT(DownsampleColorID);
-            cmd.ReleaseTemporaryRT(DownsampleDepthID);
+            // cmd.ReleaseTemporaryRT(DownsampleColorID);
+            // cmd.ReleaseTemporaryRT(DownsampleDepthID);
             cmd.Clear();
             // cmd.Release();
             CommandBufferPool.Release(cmd);
@@ -194,7 +204,7 @@ public class CloudFeature : ScriptableRendererFeature
             bool preserveDepth = false)
         {
             // cmd.SetGlobalTexture(Shader.PropertyToID("_MainTex"), source);
-            bool clear = (loadAction == RenderBufferLoadAction.Clear);
+            var clear = loadAction == RenderBufferLoadAction.Clear;
             if (clear)
                 loadAction = RenderBufferLoadAction.DontCare;
 
@@ -220,7 +230,7 @@ public class CloudFeature : ScriptableRendererFeature
         }
     }
 
-    RayMarchingCloudPass m_ScriptablePass;
+    private RayMarchingCloudPass m_ScriptablePass;
 
     // public CloudSetting cloudSetting;
     public Texture3D cloud3D;
@@ -280,13 +290,17 @@ public class CloudFeature : ScriptableRendererFeature
         if (findCloudBox != null)
         {
             cloudTransform = findCloudBox.GetComponent<Transform>();
-            m_ScriptablePass.cloudTransform = this.cloudTransform;
-
+            m_ScriptablePass.cloudTransform = cloudTransform;
             renderer.EnqueuePass(m_ScriptablePass);
         }
         else
         {
             findCloudBox = GameObject.Find("CloudBox");
+        }
+
+        if (m_ScriptablePass.m_Material == null)
+        {
+            m_ScriptablePass.m_Material = CoreUtils.CreateEngineMaterial(Shader.Find("Hidden/Custom/RayMarchingCloud"));
         }
     }
 }

@@ -3,8 +3,9 @@
    
     HLSLINCLUDE
 
-#include "Packages/com.unity.postprocessing/PostProcessing/Shaders/StdLib.hlsl"
-
+// #include "Packages/com.unity.postprocessing/PostProcessing/Shaders/StdLib.hlsl"
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+#include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"
             float _step;
             float _rayStep;
             float _rayOffsetStrength;
@@ -27,6 +28,7 @@
             float4 _shapeNoiseWeights;
             float _detailWeights;
             float _detailNoiseWeight;
+#define TEXTURE2D_SAMPLER2D(textureName, samplerName) Texture2D textureName; SamplerState samplerName
 
             TEXTURE2D_SAMPLER2D(_CameraDepthTexture, sampler_CameraDepthTexture);
             TEXTURE2D_SAMPLER2D(_LowDepthTexture, sampler_LowDepthTexture);
@@ -184,6 +186,45 @@
                 cloudColor = lerp(_colB, cloudColor, saturate(pow(transmittance * _colorOffset2, 3)));
                 return _darknessThreshold + transmittance * (1 - _darknessThreshold) * cloudColor;
             }
+            struct AttributesDefault
+            {
+                float3 vertex : POSITION;
+            };
+            struct VaryingsDefault
+            {
+                float4 vertex : SV_POSITION;
+                float2 texcoord : TEXCOORD0;
+                float2 texcoordStereo : TEXCOORD1;
+            #if STEREO_INSTANCING_ENABLED
+                uint stereoTargetEyeIndex : SV_RenderTargetArrayIndex;
+            #endif
+            };
+            float _RenderViewportScaleFactor;
+            float2 TransformStereoScreenSpaceTex(float2 uv, float w)
+            {
+                return uv * _RenderViewportScaleFactor;
+            }
+            // Vertex manipulation
+            float2 TransformTriangleVertexToUV(float2 vertex)
+            {
+                float2 uv = (vertex + 1.0) * 0.5;
+                return uv;
+            }
+            VaryingsDefault VertDefault(AttributesDefault v)
+            {
+                VaryingsDefault o;
+                o.vertex = float4(v.vertex.xy, 0.0, 1.0);
+                o.texcoord = TransformTriangleVertexToUV(v.vertex.xy);
+            
+            #if UNITY_UV_STARTS_AT_TOP
+                o.texcoord = o.texcoord * float2(1.0, -1.0) + float2(0.0, 1.0);
+            #endif
+            
+                o.texcoordStereo = TransformStereoScreenSpaceTex(o.texcoord, 1.0);
+            
+                return o;
+            }
+
 
 			float4 Frag(VaryingsDefault i) : SV_Target
 			{
@@ -285,6 +326,15 @@
 
                 Pass
                 {
+                     Cull Off ZWrite Off ZTest Always
+
+                     HLSLPROGRAM
+                     #pragma vertex VertDefault
+                     #pragma fragment DownsampleDepth
+                     ENDHLSL
+                }
+                Pass
+                {
                     HLSLPROGRAM
 
                     
@@ -294,15 +344,6 @@
                     ENDHLSL
                 }
 
-                Pass
-                {
-                     Cull Off ZWrite Off ZTest Always
-
-                     HLSLPROGRAM
-                     #pragma vertex VertDefault
-                     #pragma fragment DownsampleDepth
-                     ENDHLSL
-                }
 
                 Pass
                 {
