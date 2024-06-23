@@ -35,13 +35,27 @@ half3 LightingSpecular(half3 lightColor, half3 lightDir, half3 normal, half3 vie
     half3 specularReflection = specular.rgb * modifier;
     return lightColor * specularReflection;
 }
+float Curvature(float3 VertexNormal,float3 WorldPos)
+{
+    float DeltaN = length(abs(ddx(VertexNormal))+abs(ddy(VertexNormal)));
+    float DeltaP = length(abs(ddx(WorldPos))+abs(ddy(WorldPos)));
+    float curvature = DeltaN/DeltaP;
+    return curvature;
+}
 
 half3 LightingPhysicallyBased(BRDFData brdfData, BRDFData brdfDataClearCoat,
     half3 lightColor, half3 lightDirectionWS, half lightAttenuation,
     half3 normalWS, half3 viewDirectionWS,
     half clearCoatMask, bool specularHighlightsOff)
 {
+#ifdef _SSS
+    // half SG_Curvature = Curvature(brdf)
     half NdotL = saturate(dot(normalWS, lightDirectionWS));
+
+#else
+    half NdotL = saturate(dot(normalWS, lightDirectionWS));
+
+#endif
     half3 radiance = lightColor * (lightAttenuation * NdotL);
 
     half3 brdf = brdfData.diffuse;

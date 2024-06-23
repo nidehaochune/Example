@@ -69,6 +69,7 @@ float3 SGSGDiffuseLighting (float3 N, float3 lightDir, float3 ScatterAmt)
 
     return SGDiffuse;
 }
+
 /* Example
 float SG_Curvature = SAMPLE_TEXTURE2D(_SkinBaseMap, sampler_SkinBaseMap, i.texcoord.xy).w;
 
