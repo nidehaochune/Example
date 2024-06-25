@@ -194,7 +194,7 @@
             {
                 float4 vertex : SV_POSITION;
                 float2 texcoord : TEXCOORD0;
-                float2 texcoordStereo : TEXCOORD1;
+                // float2 texcoordStereo : TEXCOORD1;
             #if STEREO_INSTANCING_ENABLED
                 uint stereoTargetEyeIndex : SV_RenderTargetArrayIndex;
             #endif
@@ -220,7 +220,7 @@
                 o.texcoord = o.texcoord * float2(1.0, -1.0) + float2(0.0, 1.0);
             #endif
             
-                o.texcoordStereo = TransformStereoScreenSpaceTex(o.texcoord, 1.0);
+                // o.texcoordStereo = TransformStereoScreenSpaceTex(o.texcoord, 1.0);
             
                 return o;
             }
@@ -228,7 +228,7 @@
 
 			float4 Frag(VaryingsDefault i) : SV_Target
 			{
-                float depth = SAMPLE_DEPTH_TEXTURE(_LowDepthTexture, sampler_LowDepthTexture, i.texcoordStereo);
+                float depth = SAMPLE_DEPTH_TEXTURE(_LowDepthTexture, sampler_LowDepthTexture, i.texcoord);
                 float3 rayPos = _WorldSpaceCameraPos;
                 
                

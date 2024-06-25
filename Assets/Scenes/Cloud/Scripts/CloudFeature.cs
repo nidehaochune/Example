@@ -151,38 +151,35 @@ public class CloudFeature : ScriptableRendererFeature
             var scaleMatrix = cloudTransform.localScale * 0.1f;
             scaleMatrix = new Vector3(1 / scaleMatrix.x, 1 / scaleMatrix.y, 1 / scaleMatrix.z);
             var TRSMatrix = Matrix4x4.TRS(cloudTransform.position, rotation, scaleMatrix);
-            cmd.SetGlobalMatrix(Shader.PropertyToID("_TRSMatrix"), TRSMatrix);
+            m_Material.SetMatrix(Shader.PropertyToID("_TRSMatrix"), TRSMatrix);
+            // m_Material.SetTexture(Shader.PropertyToID("_LowDepthTexture"), _DownSampleDepthHandle);
+            // m_Material.SetTexture(Shader.PropertyToID("_DownsampleColor"), _DownSampleColorHandle);
+
         }
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
             var cmd = CommandBufferPool.Get();
             var currentTarget = renderingData.cameraData.renderer.cameraColorTargetHandle;
-            //降深度采样
             var DownsampleDepthID = Shader.PropertyToID("_LowDepthTexture");
             cmd.GetTemporaryRT(DownsampleDepthID, renderingData.cameraData.cameraTargetDescriptor, FilterMode.Point);
-            BlitFullscreenTriangle(cmd, renderingData.cameraData.renderer.cameraColorTargetHandle, DownsampleDepthID,
-                0);
             
-            // //降cloud分辨率 并使用第1个pass 渲染云
             var DownsampleColorID = Shader.PropertyToID("_DownsampleColor");
             cmd.GetTemporaryRT(DownsampleColorID, renderingData.cameraData.cameraTargetDescriptor, FilterMode.Bilinear);
+            //降深度采样
+            BlitFullscreenTriangle(cmd, renderingData.cameraData.renderer.cameraColorTargetHandle, DownsampleDepthID,0);
+            // //降cloud分辨率 并使用第1个pass 渲染云
             BlitFullscreenTriangle(cmd, DownsampleDepthID, DownsampleColorID, 1);
-            
             // //使用第2个Pass 合成
-            cmd.SetGlobalTexture(Shader.PropertyToID("_MainTex"), currentTarget);
+            // cmd.SetGlobalTexture(Shader.PropertyToID("_MainTex"), currentTarget);
             BlitFullscreenTriangle(cmd, DownsampleColorID, currentTarget, 2);
             
             // cmd.Blit(DownsampleColorID,renderingData.cameraData.renderer.cameraColorTargetHandle);
+
             
-            
-            // cmd.SetGlobalTexture(Shader.PropertyToID("_LowDepthTexture"), _DownSampleDepthHandle.name);
+            // Blitter.BlitCameraTexture(cmd, currentTarget, _DownSampleDepthHandle, m_Material, 0);
             //
-            // Blitter.BlitCameraTexture(cmd, currentTarget, _DownSampleDepthHandle, m_Material, 1);
-            //
-            //
-            // Blitter.BlitCameraTexture(cmd, _DownSampleDepthHandle, _DownSampleColorHandle, m_Material, 0);
-            // cmd.SetGlobalTexture(Shader.PropertyToID("_DownsampleColor"), _DownSampleColorHandle);
+            // Blitter.BlitCameraTexture(cmd, _DownSampleDepthHandle, _DownSampleColorHandle, m_Material, 1);
             //
             // Blitter.BlitCameraTexture(cmd, _DownSampleColorHandle, currentTarget, m_Material, 2);
 
