@@ -170,7 +170,7 @@ public class CloudFeature : ScriptableRendererFeature
             BlitFullscreenTriangle(cmd, DownsampleDepthID, DownsampleColorID, 1);
             
             // //使用第2个Pass 合成
-            // cmd.SetGlobalTexture(Shader.PropertyToID("_MainTex"), currentTarget);
+            cmd.SetGlobalTexture(Shader.PropertyToID("_MainTex"), currentTarget);
             BlitFullscreenTriangle(cmd, DownsampleColorID, currentTarget, 2);
             
             // cmd.Blit(DownsampleColorID,renderingData.cameraData.renderer.cameraColorTargetHandle);

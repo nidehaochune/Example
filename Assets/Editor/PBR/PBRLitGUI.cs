@@ -106,6 +106,12 @@ namespace UnityEditor.Rendering.Universal.ShaderGUI
             /// </summary>
             public static GUIContent SSSText = EditorGUIUtility.TrTextContent("SSS Map",
                 "Sets an SSS Texture");
+            
+            public static GUIContent _SkinScatterAmountMultiValueText = EditorGUIUtility.TrTextContent("SSS MultiValue",
+                "Sets an SSS MultiValue");
+            
+            public static GUIContent _SkinScatterAmountAddValueText = EditorGUIUtility.TrTextContent("SSS AddValue",
+                "Sets an SSS AddValue");
             /// <summary>
             /// The names for smoothness alpha options available for metallic workflow.
             /// </summary>
@@ -215,6 +221,8 @@ namespace UnityEditor.Rendering.Universal.ShaderGUI
             public MaterialProperty occlusionMap;
 
             public MaterialProperty SSSMap;
+            public MaterialProperty _SkinScatterAmountMultiValue;
+            public MaterialProperty _SkinScatterAmountAddValue;
 
             // Advanced Props
 
@@ -280,6 +288,8 @@ namespace UnityEditor.Rendering.Universal.ShaderGUI
                 
                 //Self Properties
                 SSSMap = BaseShaderGUI.FindProperty("_SSSMap", properties, false);
+                _SkinScatterAmountMultiValue =BaseShaderGUI.FindProperty("_SkinScatterAmountMulti", properties, false);
+                _SkinScatterAmountAddValue = BaseShaderGUI.FindProperty("_SkinScatterAmountAdd", properties, false);
             }
         }
 
@@ -337,6 +347,15 @@ namespace UnityEditor.Rendering.Universal.ShaderGUI
             else
             {
                 DrawFloatToggleProperty(Styles.SSSText, properties.SSSMap);
+
+                if ((properties._SkinScatterAmountMultiValue != null) &&
+                    (properties._SkinScatterAmountAddValue != null)&&(properties.SSSMap.floatValue!= 0))
+                {
+                    materialEditor.ShaderProperty(properties._SkinScatterAmountMultiValue, Styles._SkinScatterAmountMultiValueText, 1);
+                    materialEditor.ShaderProperty(properties._SkinScatterAmountAddValue, Styles._SkinScatterAmountAddValueText, 1);
+
+                }
+
                 if (material.GetFloat("_SSSMap")==0)
                 {
                     material.DisableKeyword("_SSS");

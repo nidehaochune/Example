@@ -26,6 +26,10 @@ half _Parallax;
 half _OcclusionStrength;
 half _ClearCoatMask;
 half _ClearCoatSmoothness;
+#ifdef _SSS
+half _SkinScatterAmountMulti;
+half _SkinScatterAmountAdd;
+#endif
 half _DetailAlbedoMapScale;
 half _DetailNormalMapScale;
 half _Surface;

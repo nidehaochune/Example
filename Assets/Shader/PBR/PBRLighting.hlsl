@@ -50,6 +50,9 @@ half3 LightingPhysicallyBased(BRDFData brdfData, BRDFData brdfDataClearCoat,
 {
 #ifdef _SSS
     // half SG_Curvature = Curvature(brdf)
+    // float SG_Clamp = clamp((SG_Curvature * _SkinScatterAmountMulti + _SkinScatterAmountAdd), -5, 5);
+    // SG_Clamp = pow (SG_Clamp, 5) ;
+    //
     half NdotL = saturate(dot(normalWS, lightDirectionWS));
 
 #else
