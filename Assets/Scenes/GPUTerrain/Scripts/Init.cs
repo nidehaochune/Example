@@ -60,6 +60,7 @@ public class Init : MonoBehaviour
             heightMap.Apply();
 
             var layer = terrains[0].terrainData.terrainLayers[0];
+            // Texture Set
             RendererFeatureTerrain.SetTerrainTexture(layer.diffuseTexture, layer.normalMapTexture);
             RendererFeatureTerrain.sIsWorking = false;
             ChangeTerrain();
