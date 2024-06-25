@@ -112,6 +112,15 @@ namespace UnityEditor.Rendering.Universal.ShaderGUI
             
             public static GUIContent _SkinScatterAmountAddValueText = EditorGUIUtility.TrTextContent("SSS AddValue",
                 "Sets an SSS AddValue");
+            
+            public static GUIContent _SkinScatterAmountText = EditorGUIUtility.TrTextContent("SSS Amount",
+                "Sets an SSS Amount");
+            public static GUIContent _SkinScatterClampMinText = EditorGUIUtility.TrTextContent("SSS ClampMin",
+                "Sets an SSS ClampMin");
+            public static GUIContent _SkinScatterClampMaxText = EditorGUIUtility.TrTextContent("SSS ClampMax",
+                "Sets an SSS ClampMax");
+            public static GUIContent _CurvatureTextureText = EditorGUIUtility.TrTextContent("Curvature AddValue",
+                "Sets an Curvature Texture");
             /// <summary>
             /// The names for smoothness alpha options available for metallic workflow.
             /// </summary>
@@ -223,6 +232,11 @@ namespace UnityEditor.Rendering.Universal.ShaderGUI
             public MaterialProperty SSSMap;
             public MaterialProperty _SkinScatterAmountMultiValue;
             public MaterialProperty _SkinScatterAmountAddValue;
+            public MaterialProperty _SkinScatterAmountValue;
+            // public MaterialProperty _SkinScatterClampMinValue;
+            // public MaterialProperty _SkinScatterClampMaxValue;
+
+            public MaterialProperty _CurvatureTexture;
 
             // Advanced Props
 
@@ -290,6 +304,11 @@ namespace UnityEditor.Rendering.Universal.ShaderGUI
                 SSSMap = BaseShaderGUI.FindProperty("_SSSMap", properties, false);
                 _SkinScatterAmountMultiValue =BaseShaderGUI.FindProperty("_SkinScatterAmountMulti", properties, false);
                 _SkinScatterAmountAddValue = BaseShaderGUI.FindProperty("_SkinScatterAmountAdd", properties, false);
+                _CurvatureTexture = BaseShaderGUI.FindProperty("_CurvatureTexture", properties, false);
+                _SkinScatterAmountValue = BaseShaderGUI.FindProperty("_SkinScatterAmount", properties, false);
+                // _SkinScatterClampMinValue = BaseShaderGUI.FindProperty("_SkinScatterClampMin", properties, false);
+                // _SkinScatterClampMaxValue = BaseShaderGUI.FindProperty("_SkinScatterClampMax", properties, false);
+
             }
         }
 
@@ -353,7 +372,10 @@ namespace UnityEditor.Rendering.Universal.ShaderGUI
                 {
                     materialEditor.ShaderProperty(properties._SkinScatterAmountMultiValue, Styles._SkinScatterAmountMultiValueText, 1);
                     materialEditor.ShaderProperty(properties._SkinScatterAmountAddValue, Styles._SkinScatterAmountAddValueText, 1);
-
+                    materialEditor.ColorProperty(properties._SkinScatterAmountValue, Styles._SkinScatterAmountText.text);
+                    // materialEditor.ShaderProperty(properties._SkinScatterClampMaxValue, Styles._SkinScatterClampMaxText, 1);
+                    // materialEditor.ShaderProperty(properties._SkinScatterClampMinValue, Styles._SkinScatterClampMinText, 1);
+                    materialEditor.TexturePropertySingleLine( Styles._CurvatureTextureText,properties._CurvatureTexture );
                 }
 
                 if (material.GetFloat("_SSSMap")==0)

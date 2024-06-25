@@ -35,31 +35,25 @@ half3 LightingSpecular(half3 lightColor, half3 lightDir, half3 normal, half3 vie
     half3 specularReflection = specular.rgb * modifier;
     return lightColor * specularReflection;
 }
-float Curvature(float3 VertexNormal,float3 WorldPos)
-{
-    float DeltaN = length(abs(ddx(VertexNormal))+abs(ddy(VertexNormal)));
-    float DeltaP = length(abs(ddx(WorldPos))+abs(ddy(WorldPos)));
-    float curvature = DeltaN/DeltaP;
-    return curvature;
-}
-
 half3 LightingPhysicallyBased(BRDFData brdfData, BRDFData brdfDataClearCoat,
     half3 lightColor, half3 lightDirectionWS, half lightAttenuation,
     half3 normalWS, half3 viewDirectionWS,
     half clearCoatMask, bool specularHighlightsOff)
 {
 #ifdef _SSS
-    // half SG_Curvature = Curvature(brdf)
-    // float SG_Clamp = clamp((SG_Curvature * _SkinScatterAmountMulti + _SkinScatterAmountAdd), -5, 5);
-    // SG_Clamp = pow (SG_Clamp, 5) ;
+    half SG_Curvature = brdfData.curvature;
+    float SG_Clamp = clamp((SG_Curvature * _SkinScatterAmountMulti + _SkinScatterAmountAdd), 0, 1);
+    SG_Clamp = pow (SG_Clamp, 5) ;
     //
-    half NdotL = saturate(dot(normalWS, lightDirectionWS));
+    float3 SG_Mid_Result = SGSGDiffuseLighting(normalWS, lightDirectionWS, _SkinScatterAmount* SG_Clamp);
+    // half NdotL = SG_Mid_Result;
+    half3 radiance = lightColor * (lightAttenuation * SG_Mid_Result);
 
 #else
     half NdotL = saturate(dot(normalWS, lightDirectionWS));
+    half3 radiance = lightColor * (lightAttenuation * NdotL);
 
 #endif
-    half3 radiance = lightColor * (lightAttenuation * NdotL);
 
     half3 brdf = brdfData.diffuse;
 #ifndef _SPECULARHIGHLIGHTS_OFF
@@ -86,6 +80,8 @@ half3 LightingPhysicallyBased(BRDFData brdfData, BRDFData brdfDataClearCoat,
 #endif // _SPECULARHIGHLIGHTS_OFF
 
     return brdf * radiance;
+
+
 }
 
 half3 LightingPhysicallyBased(BRDFData brdfData, BRDFData brdfDataClearCoat, Light light, half3 normalWS, half3 viewDirectionWS, half clearCoatMask, bool specularHighlightsOff)

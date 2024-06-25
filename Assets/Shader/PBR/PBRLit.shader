@@ -73,8 +73,13 @@ Shader "PBR/Lit"
         [HideInInspector][NoScaleOffset]unity_Lightmaps("unity_Lightmaps", 2DArray) = "" {}
         [HideInInspector][NoScaleOffset]unity_LightmapsInd("unity_LightmapsInd", 2DArray) = "" {}
         [HideInInspector][NoScaleOffset]unity_ShadowMasks("unity_ShadowMasks", 2DArray) = "" {}
-        _SkinScatterAmountMulti("_SkinScatterAmountMulti",Range(-5,5) ) = 0
-        _SkinScatterAmountAdd("_SkinScatterAmountAdd",Range(-5,5) ) = 0
+        _SkinScatterAmountMulti("_SkinScatterAmountMulti",Range(0,5) ) = 0
+        _SkinScatterAmountAdd("_SkinScatterAmountAdd",Range(0,1) ) = 0
+        _SkinScatterAmount("_SkinScatterAmount",Color ) = (1,1,1,1)
+//        _SkinScatterClampMin("_SkinScatterClampMin",Range(0,1) ) = 0
+//        _SkinScatterClampMax("_SkinScatterClampMax",Range(0,5) ) = 0
+
+                _CurvatureTexture("Curvature Texture",2D) = "white" {}
     }
 
     SubShader

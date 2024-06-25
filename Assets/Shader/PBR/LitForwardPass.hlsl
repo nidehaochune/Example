@@ -112,6 +112,9 @@ void InitializeInputData(Varyings input, half3 normalTS, out InputData inputData
 
     inputData.normalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(input.positionCS);
     inputData.shadowMask = SAMPLE_SHADOWMASK(input.staticLightmapUV);
+    // #ifdef _SSS
+    // inputData.uv = input.uv;
+    // #endif
 
     #if defined(DEBUG_DISPLAY)
     #if defined(DYNAMICLIGHTMAP_ON)
