@@ -29,7 +29,13 @@ public class UIObjectPoolMgr<T> where T : class
     public RectTransform[] OnFetch(ObjectPool<T> opType, RectTransform dynamicListItems, int maxCreateCount,
         RectTransform content)
     {
-        return _rectTransforms;
+        RectTransform[] rectTransforms = new RectTransform[maxCreateCount];
+        // for (int i = 0; i < maxCreateCount; i++)
+        // {
+        //     rectTransforms[i] = new RectTransform();
+        // }
+        // opType.Get();
+        return rectTransforms;
     }
 
 }
