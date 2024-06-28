@@ -34,7 +34,8 @@
             TEXTURE2D_SAMPLER2D(_LowDepthTexture, sampler_LowDepthTexture);
             TEXTURE2D_SAMPLER2D(_DownsampleColor, sampler_DownsampleColor);
 			TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex);
-			TEXTURE2D_SAMPLER2D(_MainTex2, sampler_MainTex2);
+			TEXTURE2D_SAMPLER2D(_CameraOpaqueTexture, sampler_CameraOpaqueTexture);
+
 
             float4 _CameraDepthTexture_TexelSize;
 
@@ -189,6 +190,8 @@
             struct AttributesDefault
             {
                 float3 vertex : POSITION;
+                uint vertexID : SV_VertexID;
+    UNITY_VERTEX_INPUT_INSTANCE_ID
             };
             struct VaryingsDefault
             {
@@ -213,11 +216,13 @@
             VaryingsDefault VertDefault(AttributesDefault v)
             {
                 VaryingsDefault o;
-                o.vertex = float4(v.vertex.xy, 0.0, 1.0);
-                o.texcoord = TransformTriangleVertexToUV(v.vertex.xy);
-            
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(v);
+                // o.vertex = float4(v.vertex.xy, 0.0, 1.0);
+                // o.texcoord = TransformTriangleVertexToUV(v.vertex.xy);
+                o.vertex = GetFullScreenTriangleVertexPosition(v.vertexID);
+                o.texcoord  = GetFullScreenTriangleTexCoord(v.vertexID);
             #if UNITY_UV_STARTS_AT_TOP
-                o.texcoord = o.texcoord * float2(1.0, -1.0) + float2(0.0, 1.0);
+                // o.texcoord = o.texcoord * float2(1.0, -1.0) + float2(0.0, 1.0);
             #endif
             
                 // o.texcoordStereo = TransformStereoScreenSpaceTex(o.texcoord, 1.0);
@@ -306,12 +311,13 @@
 
             float4 FragCombine(VaryingsDefault i) : SV_Target
             {
-                float4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord);
+                // float4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord);
+                float4 color = SAMPLE_TEXTURE2D(_CameraOpaqueTexture, sampler_CameraOpaqueTexture, i.texcoord);
                 float4 cloudColor = SAMPLE_TEXTURE2D(_DownsampleColor, sampler_DownsampleColor, i.texcoord);
-                
+
                 color.rgb *= cloudColor.a;
                 color.rgb += cloudColor.rgb;
-                return color;
+                return  color;
             }
 
             

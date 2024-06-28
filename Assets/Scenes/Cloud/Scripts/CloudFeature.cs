@@ -56,9 +56,12 @@ public class CloudFeature : ScriptableRendererFeature
         private RTHandle _DownSampleDepthHandle;
         private RTHandle _DownSampleColorHandle;
 
+        private RTHandle currentTarget;
+
         public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
         {
             UpdateMaterial(cmd, ref renderingData);
+            currentTarget = renderingData.cameraData.renderer.cameraColorTargetHandle;
             RenderingUtils.ReAllocateIfNeeded(
                 ref _DownSampleDepthHandle,
                 renderingData.cameraData.cameraTargetDescriptor,
@@ -73,7 +76,9 @@ public class CloudFeature : ScriptableRendererFeature
                 TextureWrapMode.Clamp,
                 false, 1, 0,
                 "_DownsampleColor");
-            ConfigureInput(ScriptableRenderPassInput.Color);
+            // ConfigureInput(ScriptableRenderPassInput.Color);
+            // ConfigureInput(ScriptableRenderPassInput.Depth);
+            ConfigureTarget(currentTarget);
         }
 
         private void UpdateMaterial(CommandBuffer cmd, ref RenderingData renderingData)
@@ -172,13 +177,13 @@ public class CloudFeature : ScriptableRendererFeature
             // //降cloud分辨率 并使用第1个pass 渲染云
             BlitFullscreenTriangle(cmd, DownsampleDepthID, DownsampleColorID, 1);
             // //使用第2个Pass 合成
-            cmd.SetGlobalTexture(Shader.PropertyToID("_MainTex"), currentTarget);
+            // cmd.SetGlobalTexture(Shader.PropertyToID("_MainTex"), currentTarget);
             BlitFullscreenTriangle(cmd, DownsampleColorID, currentTarget, 2);
             
             // cmd.Blit(DownsampleColorID,renderingData.cameraData.renderer.cameraColorTargetHandle);
 
             
-            // Blitter.BlitCameraTexture(cmd, currentTarget, _DownSampleDepthHandle, m_Material, 0);
+            // Blitter.BlitCameraTexture(cmd, currentTarget, currentTarget, m_Material, 0);
             //
             // Blitter.BlitCameraTexture(cmd, _DownSampleDepthHandle, _DownSampleColorHandle, m_Material, 1);
             //
