@@ -314,10 +314,10 @@
                 // float4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord);
                 float4 color = SAMPLE_TEXTURE2D(_CameraOpaqueTexture, sampler_CameraOpaqueTexture, i.texcoord);
                 float4 cloudColor = SAMPLE_TEXTURE2D(_DownsampleColor, sampler_DownsampleColor, i.texcoord);
-
+                
                 color.rgb *= cloudColor.a;
                 color.rgb += cloudColor.rgb;
-                return  color;
+                return  color ;
             }
 
             
@@ -328,6 +328,7 @@
 
             SubShader
             {
+//                Tags {"RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline"}
                 Cull Off ZWrite Off ZTest Always
 
                 Pass

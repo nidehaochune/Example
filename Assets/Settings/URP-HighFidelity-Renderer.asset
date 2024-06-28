@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 160ee4201d17f48d5b7ade50e127f641, type: 3}
   m_Name: CloudFeature
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   cloud3D: {fileID: 11700000, guid: cb4b6eb5c9e81414487f4f275cfce048, type: 2}
   noiseDetail3D: {fileID: 11700000, guid: dde5d5a1451767d48b0ea30f597f1983, type: 2}
   shapeTiling: 0.002

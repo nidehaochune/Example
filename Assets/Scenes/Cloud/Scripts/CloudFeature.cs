@@ -166,7 +166,7 @@ public class CloudFeature : ScriptableRendererFeature
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
             var cmd = CommandBufferPool.Get();
-            var currentTarget = renderingData.cameraData.renderer.cameraColorTargetHandle;
+            // var currentTarget = renderingData.cameraData.renderer.cameraColorTargetHandle;
             var DownsampleDepthID = Shader.PropertyToID("_LowDepthTexture");
             cmd.GetTemporaryRT(DownsampleDepthID, renderingData.cameraData.cameraTargetDescriptor, FilterMode.Point);
             
@@ -183,7 +183,7 @@ public class CloudFeature : ScriptableRendererFeature
             // cmd.Blit(DownsampleColorID,renderingData.cameraData.renderer.cameraColorTargetHandle);
 
             
-            // Blitter.BlitCameraTexture(cmd, currentTarget, currentTarget, m_Material, 0);
+            // Blitter.BlitCameraTexture(cmd, currentTarget, currentTarget, m_Material, 2);
             //
             // Blitter.BlitCameraTexture(cmd, _DownSampleDepthHandle, _DownSampleColorHandle, m_Material, 1);
             //
