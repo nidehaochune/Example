@@ -73,6 +73,7 @@ public class CloudFeature : ScriptableRendererFeature
                 TextureWrapMode.Clamp,
                 false, 1, 0,
                 "_DownsampleColor");
+            ConfigureInput(ScriptableRenderPassInput.Color);
         }
 
         private void UpdateMaterial(CommandBuffer cmd, ref RenderingData renderingData)
@@ -154,7 +155,7 @@ public class CloudFeature : ScriptableRendererFeature
             m_Material.SetMatrix(Shader.PropertyToID("_TRSMatrix"), TRSMatrix);
             // m_Material.SetTexture(Shader.PropertyToID("_LowDepthTexture"), _DownSampleDepthHandle);
             // m_Material.SetTexture(Shader.PropertyToID("_DownsampleColor"), _DownSampleColorHandle);
-
+        
         }
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
@@ -171,7 +172,7 @@ public class CloudFeature : ScriptableRendererFeature
             // //降cloud分辨率 并使用第1个pass 渲染云
             BlitFullscreenTriangle(cmd, DownsampleDepthID, DownsampleColorID, 1);
             // //使用第2个Pass 合成
-            // cmd.SetGlobalTexture(Shader.PropertyToID("_MainTex"), currentTarget);
+            cmd.SetGlobalTexture(Shader.PropertyToID("_MainTex"), currentTarget);
             BlitFullscreenTriangle(cmd, DownsampleColorID, currentTarget, 2);
             
             // cmd.Blit(DownsampleColorID,renderingData.cameraData.renderer.cameraColorTargetHandle);

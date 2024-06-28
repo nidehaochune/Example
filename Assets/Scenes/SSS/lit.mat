@@ -126,7 +126,7 @@ Material:
     - _SSSMap: 1
     - _SkinScatterAmount: 0.87
     - _SkinScatterAmountAdd: 0.44
-    - _SkinScatterAmountMulti: 0.32
+    - _SkinScatterAmountMulti: 1.46
     - _SkinScatterClampMax: 3.05
     - _SkinScatterClampMin: 0.17
     - _Smoothness: 0.5
