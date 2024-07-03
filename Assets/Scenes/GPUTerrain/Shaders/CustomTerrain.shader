@@ -2,7 +2,16 @@ Shader "Custom/Instance2"
 {
     Properties
     {
-        _MainTex ("Albedo Map", 2D) = "white" {}
+//        _MainTex ("Albedo Map", 2D) = "white" {}
+        [HideInInspector] _Control("Control (RGBA)", 2D) = "red" {}
+        [HideInInspector] _Splat3("Layer 3 (A)", 2D) = "grey" {}
+        [HideInInspector] _Splat2("Layer 2 (B)", 2D) = "grey" {}
+        [HideInInspector] _Splat1("Layer 1 (G)", 2D) = "grey" {}
+        [HideInInspector] _Splat0("Layer 0 (R)", 2D) = "grey" {}
+        [HideInInspector] _Normal3("Normal 3 (A)", 2D) = "bump" {}
+        [HideInInspector] _Normal2("Normal 2 (B)", 2D) = "bump" {}
+        [HideInInspector] _Normal1("Normal 1 (G)", 2D) = "bump" {}
+        [HideInInspector] _Normal0("Normal 0 (R)", 2D) = "bump" {}
     }
     SubShader
     {
@@ -129,36 +138,23 @@ Shader "Custom/Instance2"
                 #endif
                 return half4(color.rgb, 1.0);
             }
-
-            [maxvertexcount(3)]
-            void geom2(triangle v2f p[3], inout TriangleStream<v2f> triangleStream)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    v2f A = p[i];
-                    float3 AB = p[(i + 1) % 3].positionWS - A.positionWS;
-                    float3 AC = p[(i + 2) % 3].positionWS - A.positionWS;
-
-                    A.normal = half4(normalize(cross(AB, AC)), 1.0);
-                    triangleStream.Append(A);
-                }
-            }
+            
 
             // Calculate MipMap level based on screen space ddx and ddy derivatives
-            float CalculateMipLevel(float2 uv2, float textureSize)
-            {
-                float2 uv = uv2 * textureSize;
-                float2 dx = ddx(uv);
-                float2 dy = ddy(uv);
-                float rho = max(sqrt(dot(dx, dx)), sqrt(dot(dy, dy)));
-                float lambda = log2(rho);
-                int d = max(int(lambda + 0.5), 0);
-
-                // Ensure mipLevel is within the valid range (0.0 to maxMipLevel)
-                // d = clamp(d, 0.0, 8);
-
-                return d;
-            }
+            // float CalculateMipLevel(float2 uv2, float textureSize)
+            // {
+            //     float2 uv = uv2 * textureSize;
+            //     float2 dx = ddx(uv);
+            //     float2 dy = ddy(uv);
+            //     float rho = max(sqrt(dot(dx, dx)), sqrt(dot(dy, dy)));
+            //     float lambda = log2(rho);
+            //     int d = max(int(lambda + 0.5), 0);
+            //
+            //     // Ensure mipLevel is within the valid range (0.0 to maxMipLevel)
+            //     // d = clamp(d, 0.0, 8);
+            //
+            //     return d;
+            // }
             ENDHLSL
         }
     }

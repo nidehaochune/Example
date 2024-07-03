@@ -127,7 +127,7 @@ Shader "Custom/Terrain/Lit"
 
                 SplatmapFinalColor(color, inputData.fogCoord);
 
-                outColor = half4(color.rgb, 1.0h);
+                outColor = half4(1,1,1, 1.0h);
             }
             ENDHLSL
         }

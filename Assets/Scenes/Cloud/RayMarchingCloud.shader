@@ -28,7 +28,7 @@
             float4 _shapeNoiseWeights;
             float _detailWeights;
             float _detailNoiseWeight;
-#define TEXTURE2D_SAMPLER2D(textureName, samplerName) Texture2D textureName; SamplerState samplerName
+            #define TEXTURE2D_SAMPLER2D(textureName, samplerName) Texture2D textureName; SamplerState samplerName
 
             TEXTURE2D_SAMPLER2D(_CameraDepthTexture, sampler_CameraDepthTexture);
             TEXTURE2D_SAMPLER2D(_LowDepthTexture, sampler_LowDepthTexture);
@@ -221,9 +221,7 @@
                 // o.texcoord = TransformTriangleVertexToUV(v.vertex.xy);
                 o.vertex = GetFullScreenTriangleVertexPosition(v.vertexID);
                 o.texcoord  = GetFullScreenTriangleTexCoord(v.vertexID);
-            #if UNITY_UV_STARTS_AT_TOP
-                // o.texcoord = o.texcoord * float2(1.0, -1.0) + float2(0.0, 1.0);
-            #endif
+
             
                 // o.texcoordStereo = TransformStereoScreenSpaceTex(o.texcoord, 1.0);
             
@@ -311,8 +309,8 @@
 
             float4 FragCombine(VaryingsDefault i) : SV_Target
             {
-                // float4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord);
-                float4 color = SAMPLE_TEXTURE2D(_CameraOpaqueTexture, sampler_CameraOpaqueTexture, i.texcoord);
+                float4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord);
+                // float4 color = SAMPLE_TEXTURE2D(_CameraOpaqueTexture, sampler_CameraOpaqueTexture, i.texcoord);
                 float4 cloudColor = SAMPLE_TEXTURE2D(_DownsampleColor, sampler_DownsampleColor, i.texcoord);
                 
                 color.rgb *= cloudColor.a;

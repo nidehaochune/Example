@@ -107,7 +107,11 @@ public class RendererFeatureTerrain : ScriptableRendererFeature
         _s.instanceMaterial.SetTexture("_MainTex", mainMap);
         _s.instanceMaterial.SetTexture("_NormapTex", normalMap);
     }
-
+    public static void SetTerrainLayer(Texture2D mainMap, Texture2D normalMap,int layer)
+    {
+        _s.instanceMaterial.SetTexture("_MainTex", mainMap);
+        _s.instanceMaterial.SetTexture("_NormapTex", normalMap);
+    }
     void OnRenderLater(CommandBuffer cmd)
     {
         if (isPatchReadBack)

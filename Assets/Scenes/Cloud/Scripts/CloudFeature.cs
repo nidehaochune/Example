@@ -55,6 +55,7 @@ public class CloudFeature : ScriptableRendererFeature
 
         private RTHandle _DownSampleDepthHandle;
         private RTHandle _DownSampleColorHandle;
+        private RTHandle tempRT;
 
         private RTHandle currentTarget;
 
@@ -62,23 +63,31 @@ public class CloudFeature : ScriptableRendererFeature
         {
             UpdateMaterial(cmd, ref renderingData);
             currentTarget = renderingData.cameraData.renderer.cameraColorTargetHandle;
+            // RenderingUtils.ReAllocateIfNeeded(
+            //     ref _DownSampleDepthHandle,
+            //     renderingData.cameraData.cameraTargetDescriptor,
+            //     FilterMode.Point,
+            //     TextureWrapMode.Clamp,
+            //     false, 1, 0,
+            //     "_LowDepthTexture");
+            // RenderingUtils.ReAllocateIfNeeded(
+            //     ref _DownSampleColorHandle,
+            //     renderingData.cameraData.cameraTargetDescriptor,
+            //     FilterMode.Bilinear,
+            //     TextureWrapMode.Clamp,
+            //     false, 1, 0,
+            //     "_DownsampleColor");
             RenderingUtils.ReAllocateIfNeeded(
-                ref _DownSampleDepthHandle,
-                renderingData.cameraData.cameraTargetDescriptor,
-                FilterMode.Point,
-                TextureWrapMode.Clamp,
-                false, 1, 0,
-                "_LowDepthTexture");
-            RenderingUtils.ReAllocateIfNeeded(
-                ref _DownSampleColorHandle,
+                ref tempRT,
                 renderingData.cameraData.cameraTargetDescriptor,
                 FilterMode.Bilinear,
                 TextureWrapMode.Clamp,
                 false, 1, 0,
-                "_DownsampleColor");
+                "_tempRT");
             // ConfigureInput(ScriptableRenderPassInput.Color);
             // ConfigureInput(ScriptableRenderPassInput.Depth);
-            ConfigureTarget(currentTarget);
+            // ConfigureTarget(currentTarget);
+            // ConfigureClear(ClearFlag.None, Color.white);
         }
 
         private void UpdateMaterial(CommandBuffer cmd, ref RenderingData renderingData)
@@ -166,28 +175,28 @@ public class CloudFeature : ScriptableRendererFeature
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
             var cmd = CommandBufferPool.Get();
-            // var currentTarget = renderingData.cameraData.renderer.cameraColorTargetHandle;
-            var DownsampleDepthID = Shader.PropertyToID("_LowDepthTexture");
-            cmd.GetTemporaryRT(DownsampleDepthID, renderingData.cameraData.cameraTargetDescriptor, FilterMode.Point);
+             // var currentTarget = renderingData.cameraData.renderer.cameraColorTargetHandle;
+             var DownsampleDepthID = Shader.PropertyToID("_LowDepthTexture");
+             cmd.GetTemporaryRT(DownsampleDepthID, renderingData.cameraData.cameraTargetDescriptor, FilterMode.Point);
             
-            var DownsampleColorID = Shader.PropertyToID("_DownsampleColor");
-            cmd.GetTemporaryRT(DownsampleColorID, renderingData.cameraData.cameraTargetDescriptor, FilterMode.Bilinear);
-            //降深度采样
-            BlitFullscreenTriangle(cmd, renderingData.cameraData.renderer.cameraColorTargetHandle, DownsampleDepthID,0);
-            // //降cloud分辨率 并使用第1个pass 渲染云
-            BlitFullscreenTriangle(cmd, DownsampleDepthID, DownsampleColorID, 1);
-            // //使用第2个Pass 合成
-            // cmd.SetGlobalTexture(Shader.PropertyToID("_MainTex"), currentTarget);
-            BlitFullscreenTriangle(cmd, DownsampleColorID, currentTarget, 2);
-            
-            // cmd.Blit(DownsampleColorID,renderingData.cameraData.renderer.cameraColorTargetHandle);
+             var DownsampleColorID = Shader.PropertyToID("_DownsampleColor");
+             cmd.GetTemporaryRT(DownsampleColorID, renderingData.cameraData.cameraTargetDescriptor, FilterMode.Bilinear);
+            // 降深度采样
+             BlitFullscreenTriangle(cmd, currentTarget, DownsampleDepthID,0);
+             // //降cloud分辨率 并使用第1个pass 渲染云
+             BlitFullscreenTriangle(cmd, DownsampleDepthID, DownsampleColorID, 1);
+             // //使用第2个Pass 合成
+             // cmd.SetGlobalTexture(Shader.PropertyToID("_MainTex"), currentTarget);
+             // cmd.GetTemporaryRT((int)TempRT, renderingData.cameraData.cameraTargetDescriptor, FilterMode.Bilinear);
 
-            
-            // Blitter.BlitCameraTexture(cmd, currentTarget, currentTarget, m_Material, 2);
+             BlitFullscreenTriangle(cmd, DownsampleColorID, currentTarget, 2);
+             
+
+            // Blitter.BlitCameraTexture(cmd, currentTarget, _DownSampleDepthHandle, m_Material, 0);
             //
             // Blitter.BlitCameraTexture(cmd, _DownSampleDepthHandle, _DownSampleColorHandle, m_Material, 1);
             //
-            // Blitter.BlitCameraTexture(cmd, _DownSampleColorHandle, currentTarget, m_Material, 2);
+            // Blitter.BlitCameraTexture(cmd, DownsampleColorID, currentTarget, m_Material, 2);
 
 
             context.ExecuteCommandBuffer(cmd);
