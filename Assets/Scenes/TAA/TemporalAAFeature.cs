@@ -178,7 +178,7 @@ public class TemporalAAFeature : ScriptableRendererFeature
         renderer.EnqueuePass(m_temporalPass);
         if (m_temporalPass.TAAMaterial == null)
         {
-            m_temporalPass.TAAMaterial = new Material(Shader.Find("m_temporalPass.TAAMaterial"));
+            m_temporalPass.TAAMaterial = new Material(Shader.Find("Hidden/TemporalAAShader"));
         }
     }
 }
