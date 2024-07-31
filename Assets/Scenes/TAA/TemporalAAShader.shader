@@ -118,6 +118,11 @@ Shader "Hidden/TemporalAAShader"
 
                 //temporal reprojection
                 float d0 = sampleDepth(i.uv);
+                // x = 1 or -1 (-1 if projection is flipped)
+                // y = near plane
+                // z = far plane
+                // w = 1/far plane
+                //change depth range 0,1
                 float d01 = (d0 * (_ProjectionParams.z - _ProjectionParams.y) + _ProjectionParams.y) / _ProjectionParams.z;
                 float3 pos = float3(baseUV * 2.0 - 1.0, 1.0);
                 float4 rd = mul(_invP, float4(pos, 1));
