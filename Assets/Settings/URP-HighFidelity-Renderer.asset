@@ -38,6 +38,27 @@ MonoBehaviour:
   detailWeights: 2.06
   detailNoiseWeight: 6.4
   xy_Speed_zw_Warp: {x: 0.03, y: 0.2, z: 0, w: 8}
+--- !u!114 &-4742459509365332228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f15c3bed367adf64da6316ae42ef95dc, type: 3}
+  m_Name: BetterFogFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    Event: 550
+    _UseCustomDepthTexture: 0
+    _UseFogOffsetTexture: 0
+  DepthBlit: {fileID: 0}
+  FogBlit: {fileID: 0}
+  FinalBlit: {fileID: 0}
+  SSMS: {fileID: 0}
 --- !u!114 &-3094929724693229633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55,7 +76,7 @@ MonoBehaviour:
   MovementBlending: 100
   UseFlipUV: 0
   TAAMaterial: {fileID: 2100000, guid: 309975a36ee8b45ff88889147672bcc7, type: 2}
-  JitterSpread: 1
+  JitterSpread: 2
   HaltonLength: 8
 --- !u!114 &-2098840580357768535
 MonoBehaviour:
@@ -111,8 +132,9 @@ MonoBehaviour:
   - {fileID: 5405998932977147538}
   - {fileID: -2098840580357768535}
   - {fileID: 5328232041963035459}
+  - {fileID: 0}
   - {fileID: -3094929724693229633}
-  m_RendererFeatureMap: dc84118f68a66433ae988cb7b0863f4841b0dfa309e41687925e3e2863f7054ba9ba99bf9c6bdfe2439b0fdecfaef149bfcfdc22d0990cd5
+  m_RendererFeatureMap: dc84118f68a66433ae988cb7b0863f4841b0dfa309e41687925e3e2863f7054ba9ba99bf9c6bdfe2439b0fdecfaef149fc269bee33662fbebfcfdc22d0990cd5
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
