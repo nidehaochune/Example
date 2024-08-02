@@ -29,7 +29,7 @@ public class RendererFeatureTerrain : ScriptableRendererFeature
             {
 #if UNITY_EDITOR
                 _terrainGPUDriven.Draw(cmd, Camera.main);
-                renderCallBack(cmd);
+                // renderCallBack(cmd);
 #else
                 _terrainGPUDriven.Draw(cmd, renderingData.cameraData.camera);
 #endif

@@ -1369,68 +1369,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b19ecde445a88b646b6d2f75496475bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  depthRenderers:
-  - render: 1
-    alwaysRender: 0
-    renderer: {fileID: 0}
-    drawAllSubmeshes: 0
-    material: {fileID: 2100000, guid: cd995bd24a7070242968b4499e46e96c, type: 2}
-  fogOffsetRenderers:
-  - render: 1
-    alwaysRender: 0
-    renderer: {fileID: 0}
-    drawAllSubmeshes: 0
-    material: {fileID: 2100000, guid: da3c9bf8951e9dc42b13cace994d8365, type: 2}
-  - render: 1
-    alwaysRender: 0
-    renderer: {fileID: 0}
-    drawAllSubmeshes: 0
-    material: {fileID: 2100000, guid: 4b351d0fd4a27aa4bbb00fe94dd2cbbf, type: 2}
-  - render: 1
-    alwaysRender: 0
-    renderer: {fileID: 0}
-    drawAllSubmeshes: 0
-    material: {fileID: 2100000, guid: 6b5758873dfbd1f46bfed6fbb094200c, type: 2}
-  - render: 1
-    alwaysRender: 0
-    renderer: {fileID: 0}
-    drawAllSubmeshes: 0
-    material: {fileID: 2100000, guid: f66d4e5fab370774799097a1cd7fb3c5, type: 2}
-  - render: 1
-    alwaysRender: 0
-    renderer: {fileID: 0}
-    drawAllSubmeshes: 0
-    material: {fileID: 2100000, guid: d30ce468b8465e147a267bc7022ce4e6, type: 2}
-  - render: 1
-    alwaysRender: 0
-    renderer: {fileID: 0}
-    drawAllSubmeshes: 0
-    material: {fileID: 2100000, guid: 2a415bd4865534146b38d0eaeae61e0b, type: 2}
-  - render: 1
-    alwaysRender: 0
-    renderer: {fileID: 0}
-    drawAllSubmeshes: 0
-    material: {fileID: 2100000, guid: 625351779dfd79c4fa514c6ac55c7a96, type: 2}
-  - render: 1
-    alwaysRender: 0
-    renderer: {fileID: 0}
-    drawAllSubmeshes: 0
-    material: {fileID: 2100000, guid: 8ea5ba789f20c2f4196e079bf5d333a8, type: 2}
-  - render: 1
-    alwaysRender: 0
-    renderer: {fileID: 0}
-    drawAllSubmeshes: 0
-    material: {fileID: 2100000, guid: 8ea5ba789f20c2f4196e079bf5d333a8, type: 2}
-  - render: 1
-    alwaysRender: 0
-    renderer: {fileID: 0}
-    drawAllSubmeshes: 0
-    material: {fileID: 2100000, guid: 8ea5ba789f20c2f4196e079bf5d333a8, type: 2}
-  - render: 1
-    alwaysRender: 0
-    renderer: {fileID: 0}
-    drawAllSubmeshes: 0
-    material: {fileID: 2100000, guid: 50d0c4b99e32cb4499dbfac17b8e8c3c, type: 2}
+  depthRenderers: []
+  fogOffsetRenderers: []
 --- !u!81 &1555182923
 AudioListener:
   m_ObjectHideFlags: 0

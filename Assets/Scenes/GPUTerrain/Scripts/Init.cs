@@ -10,7 +10,7 @@ public class Init : MonoBehaviour
     public Terrain[] terrains;
     public Texture2D heightMap;
 
-    void Start()
+    void Awake()
     {
         TerrainConfig.GenerateRandomLODColors(20);
         // Application.targetFrameRate = 10;
@@ -34,10 +34,13 @@ public class Init : MonoBehaviour
             }
 
             var realHeightSize = Mathf.NextPowerOfTwo(heightSize);
-            int totalHeightSize = realHeightSize * terrainNum / splitNumX;
+            int totalHeightSize = 1024;
             float[] pixelData = new float[totalHeightSize * totalHeightSize];
             heightMap = new Texture2D(totalHeightSize, totalHeightSize, TextureFormat.RFloat, false);
+            Debug.LogError("heightSize totalHeightSize = " + totalHeightSize);
+
             maxHeight = terrains[0].terrainData.heightmapScale.y;
+            Debug.LogError("maxHeighte = " + maxHeight);
 
             for (int k = 0; k < terrainNum; k++)
             {
@@ -57,12 +60,12 @@ public class Init : MonoBehaviour
 
             heightMap.SetPixelData(pixelData, 0);
             heightMap.Apply();
-            int layerLength = terrains[0].terrainData.terrainLayers.Length;
+            // int layerLength = terrains[0].terrainData.terrainLayers.Length;
             //_Splat0123
-            for (int i = 0; i < layerLength; i++)
-            {
-                
-            }
+            // for (int i = 0; i < layerLength; i++)
+            // {
+            //     
+            // }
             var layer = terrains[0].terrainData.terrainLayers[2];
 
             // Texture Set
@@ -91,74 +94,74 @@ public class Init : MonoBehaviour
             terrain.enabled = (!RendererFeatureTerrain.sIsWorking);
         }
     }
-
-#if UNITY_EDITOR
-    private GUIStyle guiStyle;
-    private GUIStyle guiToggleStyle;
-
-    private void OnGUI()
-    {
-        if (guiToggleStyle == null)
-        {
-            guiStyle = GUI.skin.label;
-            guiToggleStyle = GUI.skin.toggle;
-            guiToggleStyle.normal.textColor = Color.black;
-        }
-
-        GUILayout.BeginHorizontal();
-        GUILayout.Space(4);
-        GUILayout.BeginVertical();
-        GUILayout.Space(4);
-        GUILayout.Label(string.Format("NodeCount:{0} PatchCount:{1}", RendererFeatureTerrain.sGPUInfo[0],
-            RendererFeatureTerrain.sGPUInfo[1]), guiStyle);
-        var instance = RendererFeatureTerrain.instance;
-        instance.isViewFrustumCulling =
-            GUILayout.Toggle(instance.isViewFrustumCulling, "isViewFrustumCulling", guiToggleStyle);
-        instance.isHizCulling = GUILayout.Toggle(instance.isHizCulling, "isHizCulling", guiToggleStyle);
-        instance.isFixLODSeam =
-            GUILayout.Toggle(instance.isFixLODSeam, "isFixLODSeam", guiToggleStyle);
-        instance.isPatchReadBack =
-            GUILayout.Toggle(instance.isPatchReadBack, "isPatchReadBack", guiToggleStyle);
-        instance.isPatchDebug =
-            GUILayout.Toggle(instance.isPatchDebug, "isPatchDebug", guiToggleStyle);
-        instance.isMipDebug =
-            GUILayout.Toggle(instance.isMipDebug, "isMipDebug", guiToggleStyle);
-        if (instance.isMipDebug)
-            instance.isLODDebug = false;
-        instance.isLODDebug =
-            GUILayout.Toggle(instance.isLODDebug, "isLODDebug", guiToggleStyle);
-        if (instance.isLODDebug)
-            instance.isMipDebug = false;
-
-        if (instance.isLODDebug)
-        {
-            GUILayout.BeginHorizontal();
-            for (int i = 0; i < 4; i++)
-            {
-                guiStyle.normal.textColor = TerrainConfig.GetDebugColor(i);
-                GUILayout.Label($"LOD:{i}", guiStyle);
-            }
-
-            GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal();
-            for (int i = 4; i < 8; i++)
-            {
-                guiStyle.normal.textColor = TerrainConfig.GetDebugColor(i);
-                GUILayout.Label($"LOD:{i}", guiStyle);
-            }
-
-            GUILayout.EndHorizontal();
-
-            guiStyle.normal.textColor = Color.black;
-        }
-
-        instance.isManualUpdate =
-            GUILayout.Toggle(instance.isManualUpdate, "isManualUpdate", guiToggleStyle);
-        GUILayout.EndVertical();
-        GUILayout.EndHorizontal();
-        GUI.Box(new Rect(0, 0, 200, instance.isLODDebug ? 260 : 210), Texture2D.blackTexture);
-    }
+//
+// #if UNITY_EDITOR
+//     private GUIStyle guiStyle;
+//     private GUIStyle guiToggleStyle;
+//
+//     private void OnGUI()
+//     {
+//         if (guiToggleStyle == null)
+//         {
+//             guiStyle = GUI.skin.label;
+//             guiToggleStyle = GUI.skin.toggle;
+//             guiToggleStyle.normal.textColor = Color.black;
+//         }
+//
+//         GUILayout.BeginHorizontal();
+//         GUILayout.Space(4);
+//         GUILayout.BeginVertical();
+//         GUILayout.Space(4);
+//         GUILayout.Label(string.Format("NodeCount:{0} PatchCount:{1}", RendererFeatureTerrain.sGPUInfo[0],
+//             RendererFeatureTerrain.sGPUInfo[1]), guiStyle);
+//         var instance = RendererFeatureTerrain.instance;
+//         instance.isViewFrustumCulling =
+//             GUILayout.Toggle(instance.isViewFrustumCulling, "isViewFrustumCulling", guiToggleStyle);
+//         instance.isHizCulling = GUILayout.Toggle(instance.isHizCulling, "isHizCulling", guiToggleStyle);
+//         instance.isFixLODSeam =
+//             GUILayout.Toggle(instance.isFixLODSeam, "isFixLODSeam", guiToggleStyle);
+//         instance.isPatchReadBack =
+//             GUILayout.Toggle(instance.isPatchReadBack, "isPatchReadBack", guiToggleStyle);
+//         instance.isPatchDebug =
+//             GUILayout.Toggle(instance.isPatchDebug, "isPatchDebug", guiToggleStyle);
+//         instance.isMipDebug =
+//             GUILayout.Toggle(instance.isMipDebug, "isMipDebug", guiToggleStyle);
+//         if (instance.isMipDebug)
+//             instance.isLODDebug = false;
+//         instance.isLODDebug =
+//             GUILayout.Toggle(instance.isLODDebug, "isLODDebug", guiToggleStyle);
+//         if (instance.isLODDebug)
+//             instance.isMipDebug = false;
+//
+//         if (instance.isLODDebug)
+//         {
+//             GUILayout.BeginHorizontal();
+//             for (int i = 0; i < 4; i++)
+//             {
+//                 guiStyle.normal.textColor = TerrainConfig.GetDebugColor(i);
+//                 GUILayout.Label($"LOD:{i}", guiStyle);
+//             }
+//
+//             GUILayout.EndHorizontal();
+//
+//             GUILayout.BeginHorizontal();
+//             for (int i = 4; i < 8; i++)
+//             {
+//                 guiStyle.normal.textColor = TerrainConfig.GetDebugColor(i);
+//                 GUILayout.Label($"LOD:{i}", guiStyle);
+//             }
+//
+//             GUILayout.EndHorizontal();
+//
+//             guiStyle.normal.textColor = Color.black;
+//         }
+//
+//         instance.isManualUpdate =
+//             GUILayout.Toggle(instance.isManualUpdate, "isManualUpdate", guiToggleStyle);
+//         GUILayout.EndVertical();
+//         GUILayout.EndHorizontal();
+//         GUI.Box(new Rect(0, 0, 200, instance.isLODDebug ? 260 : 210), Texture2D.blackTexture);
+//     }
 
     private void OnDrawGizmos()
     {
@@ -190,5 +193,5 @@ public class Init : MonoBehaviour
             UnityEditor.Handles.Label(new Vector3((node.x + 0.5f) * size, 0, (node.y + 0.5f) * size), node.z + "");
         }
     }
-#endif
+// #endif
 }
