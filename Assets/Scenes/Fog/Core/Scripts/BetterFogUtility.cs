@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace INab.BetterFog.Core
+namespace INab.Fog.Core
 {
 	public enum HeightFogType
 	{
@@ -17,7 +17,7 @@ namespace INab.BetterFog.Core
 		Both
 	}
 
-	public class BetterFogUtility
+	public class FogUtility
     {
 		public static GUIStyle centeredBoldLabel = new GUIStyle(GUI.skin.label)
 		{

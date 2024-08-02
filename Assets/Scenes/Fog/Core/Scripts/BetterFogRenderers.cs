@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace INab.BetterFog.Core
+namespace INab.Fog.Core
 {
     [ExecuteInEditMode]
     [RequireComponent(typeof(Camera))]
     [ImageEffectAllowedInSceneView] // We need this flag
-    public class BetterFogRenderers : MonoBehaviour
+    public class FogRenderers : MonoBehaviour
     {
         public List<CustomRenderer> depthRenderers = new List<CustomRenderer>();
         public List<CustomRenderer> fogOffsetRenderers = new List<CustomRenderer>();

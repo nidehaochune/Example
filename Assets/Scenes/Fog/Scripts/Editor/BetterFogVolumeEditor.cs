@@ -2,12 +2,12 @@ using System.Linq;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine;
-using INab.BetterFog.Core;
+using INab.Fog.Core;
 
 namespace UnityEditor.Rendering.Universal
 {
-    [VolumeComponentEditor(typeof(INab.BetterFog.URP.BetterFogVolume))]
-    public class BetterFogVolumeEditor : VolumeComponentEditor
+    [VolumeComponentEditor(typeof(INab.Fog.URP.FogVolume))]
+    public class FogVolumeEditor : VolumeComponentEditor
     {
         // FogParameters
         SerializedDataParameter _FogIntensity;
@@ -61,7 +61,7 @@ namespace UnityEditor.Rendering.Universal
 
         public override void OnEnable()
         {
-            var o = new PropertyFetcher<INab.BetterFog.URP.BetterFogVolume>(serializedObject);
+            var o = new PropertyFetcher<INab.Fog.URP.FogVolume>(serializedObject);
 
             _FogIntensity = Unpack(o.Find(x => x._FogIntensity));
             _EnergyLoss = Unpack(o.Find(x => x._EnergyLoss));
@@ -114,7 +114,7 @@ namespace UnityEditor.Rendering.Universal
 
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.LabelField("Main", BetterFogUtility.centeredBoldLabel);
+            EditorGUILayout.LabelField("Main", FogUtility.centeredBoldLabel);
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
                 PropertyField(_FogIntensity);
@@ -122,7 +122,7 @@ namespace UnityEditor.Rendering.Universal
             }
             EditorGUILayout.Space();
 
-            EditorGUILayout.LabelField("Colors", BetterFogUtility.centeredBoldLabel);
+            EditorGUILayout.LabelField("Colors", FogUtility.centeredBoldLabel);
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
                 PropertyField(_UseGradient);
@@ -140,7 +140,7 @@ namespace UnityEditor.Rendering.Universal
             }
             EditorGUILayout.Space();
 
-            EditorGUILayout.LabelField("Sun Light", BetterFogUtility.centeredBoldLabel);
+            EditorGUILayout.LabelField("Sun Light", FogUtility.centeredBoldLabel);
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
                 PropertyField(_UseSunLight);
@@ -154,7 +154,7 @@ namespace UnityEditor.Rendering.Universal
             }
             EditorGUILayout.Space();
 
-            EditorGUILayout.LabelField("Distance Fog", BetterFogUtility.centeredBoldLabel);
+            EditorGUILayout.LabelField("Distance Fog", FogUtility.centeredBoldLabel);
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
                 PropertyField(_UseDistanceFog);
@@ -180,7 +180,7 @@ namespace UnityEditor.Rendering.Universal
 
             EditorGUILayout.Space();
 
-            EditorGUILayout.LabelField("Skybox Height Fog", BetterFogUtility.centeredBoldLabel);
+            EditorGUILayout.LabelField("Skybox Height Fog", FogUtility.centeredBoldLabel);
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
                 PropertyField(_UseSkyboxHeightFog);
@@ -196,7 +196,7 @@ namespace UnityEditor.Rendering.Universal
 
             EditorGUILayout.Space();
 
-            EditorGUILayout.LabelField("Height Fog", BetterFogUtility.centeredBoldLabel);
+            EditorGUILayout.LabelField("Height Fog", FogUtility.centeredBoldLabel);
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
                 PropertyField(_UseHeightFog);
@@ -211,7 +211,7 @@ namespace UnityEditor.Rendering.Universal
 
             EditorGUILayout.Space();
 
-            EditorGUILayout.LabelField("3D Noise", BetterFogUtility.centeredBoldLabel);
+            EditorGUILayout.LabelField("3D Noise", FogUtility.centeredBoldLabel);
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
                 PropertyField(_UseNoise);
@@ -232,7 +232,7 @@ namespace UnityEditor.Rendering.Universal
 
             EditorGUILayout.Space();
 
-            EditorGUILayout.LabelField("Screen Space Multiple Scattering", BetterFogUtility.centeredBoldLabel);
+            EditorGUILayout.LabelField("Screen Space Multiple Scattering", FogUtility.centeredBoldLabel);
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
                 // SSMSParameters

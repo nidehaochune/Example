@@ -3,16 +3,16 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using System;
 using System.Collections.Generic;
-using INab.BetterFog.Core;
+using INab.Fog.Core;
 using UnityEngine.Rendering.HighDefinition;
 using static Unity.Burst.Intrinsics.X86.Avx;
 
-namespace INab.BetterFog.URP
+namespace INab.Fog.URP
 {
-	public class BetterFogFeature : ScriptableRendererFeature
+	public class FogFeature : ScriptableRendererFeature
 	{
 		[Serializable]
-		public class BetterFogSettings
+		public class FogSettings
 		{
 			public RenderPassEvent Event = RenderPassEvent.AfterRenderingOpaques;
 
@@ -20,8 +20,8 @@ namespace INab.BetterFog.URP
 			public bool _UseFogOffsetTexture = false;
 		}
 
-		public BetterFogSettings settings = new BetterFogSettings();
-		private BetterFogPass betterFogPass;
+		public FogSettings settings = new FogSettings();
+		private FogRenderPass FogPass;
 
 		private Material DepthBlit;
 		private Material FogBlit;
@@ -37,7 +37,7 @@ namespace INab.BetterFog.URP
 			SSMS = CoreUtils.CreateEngineMaterial(Shader.Find("Hidden/INabStudio/SSMS_URP"));
 
 
-			betterFogPass = new BetterFogPass(settings, DepthBlit, FogBlit, FinalBlit, SSMS);
+			FogPass = new FogRenderPass(settings, DepthBlit, FogBlit, FinalBlit, SSMS);
 
 		}
 
@@ -45,22 +45,22 @@ namespace INab.BetterFog.URP
 		{
 			if (renderingData.cameraData.cameraType != CameraType.Game && renderingData.cameraData.cameraType != CameraType.SceneView && renderingData.cameraData.cameraType != CameraType.VR) return;
 			
-			//if (betterFogVolume)
+			//if (FogVolume)
 			{
-				renderer.EnqueuePass(betterFogPass);
+				renderer.EnqueuePass(FogPass);
 			}
 		}
 		public override void SetupRenderPasses(ScriptableRenderer renderer,
 										  in RenderingData renderingData)
 		{
 			// The target is used after allocation
-			betterFogPass.SetCameraTarget(renderer.cameraColorTargetHandle);
+			FogPass.SetCameraTarget(renderer.cameraColorTargetHandle);
 		}
 
 
 		protected override void Dispose(bool disposing)
 		{
-			betterFogPass?.Dispose();
+			FogPass?.Dispose();
 
             CoreUtils.Destroy(DepthBlit);
 			CoreUtils.Destroy(FogBlit);
@@ -68,7 +68,7 @@ namespace INab.BetterFog.URP
 			CoreUtils.Destroy(SSMS);
 		}
 
-		public class BetterFogPass : ScriptableRenderPass
+		public class FogRenderPass : ScriptableRenderPass
 		{
 			private RTHandle m_FogFactorRT;
 			private RTHandle m_CustomDepthRT;
@@ -77,8 +77,8 @@ namespace INab.BetterFog.URP
 
 			private RTHandle cameraColorTarget;
 
-			private BetterFogSettings m_CurrentSettings;
-			private BetterFogVolume m_BetterFogVolume;
+			private FogSettings m_CurrentSettings;
+			private FogVolume m_FogVolume;
 
 			private Material m_DepthBlit;
 			private Material m_FogBlit;
@@ -94,7 +94,7 @@ namespace INab.BetterFog.URP
 			private List<CustomRenderer> m_DepthRenderers = new List<CustomRenderer>();
 			private List<CustomRenderer> m_FogOffsetRenderers = new List<CustomRenderer>();
 
-			public BetterFogPass(BetterFogSettings settings, Material depthBlit, Material fogBlit, Material finalBlit, Material SSMS)
+			public FogRenderPass(FogSettings settings, Material depthBlit, Material fogBlit, Material finalBlit, Material SSMS)
 			{
 				for (int i = 0; i < kMaxIterations; i++)
 				{
@@ -152,7 +152,7 @@ namespace INab.BetterFog.URP
 
 			private void FogBlitProperties()
             {
-				if (m_BetterFogVolume._UseDistanceFog.value)
+				if (m_FogVolume._UseDistanceFog.value)
 				{
 					m_FogBlit.EnableKeyword("_USEDISTANCEFOG_ON");
 				}
@@ -161,7 +161,7 @@ namespace INab.BetterFog.URP
 					m_FogBlit.DisableKeyword("_USEDISTANCEFOG_ON");
 				}
 
-				if (m_BetterFogVolume._UseSkyboxHeightFog.value)
+				if (m_FogVolume._UseSkyboxHeightFog.value)
 				{
 					m_FogBlit.EnableKeyword("_USESKYBOXHEIGHTFOG_ON");
 				}
@@ -170,7 +170,7 @@ namespace INab.BetterFog.URP
 					m_FogBlit.DisableKeyword("_USESKYBOXHEIGHTFOG_ON");
 				}
 
-				if (m_BetterFogVolume._UseHeightFog.value)
+				if (m_FogVolume._UseHeightFog.value)
 				{
 					m_FogBlit.EnableKeyword("_USEHEIGHTFOG_ON");
 				}
@@ -179,7 +179,7 @@ namespace INab.BetterFog.URP
 					m_FogBlit.DisableKeyword("_USEHEIGHTFOG_ON");
 				}
 
-				if (m_BetterFogVolume._UseNoise.value)
+				if (m_FogVolume._UseNoise.value)
 				{
 					m_FogBlit.EnableKeyword("_USENOISE_ON");
 				}
@@ -188,10 +188,10 @@ namespace INab.BetterFog.URP
 					m_FogBlit.DisableKeyword("_USENOISE_ON");
 				}
 
-				m_FogBlit.SetFloat("_FogIntensity", m_BetterFogVolume._FogIntensity.value);
-				m_FogBlit.SetInt("_UseRadialDistance", m_BetterFogVolume._UseRadialDistance.value ? 1 : 0);
+				m_FogBlit.SetFloat("_FogIntensity", m_FogVolume._FogIntensity.value);
+				m_FogBlit.SetInt("_UseRadialDistance", m_FogVolume._UseRadialDistance.value ? 1 : 0);
 
-				switch (m_BetterFogVolume._FogType.value)
+				switch (m_FogVolume._FogType.value)
 				{
 					case FogMode.Linear:
 						m_FogBlit.EnableKeyword("_FOGTYPE_LINEAR");
@@ -211,30 +211,30 @@ namespace INab.BetterFog.URP
 						break;
 				}
 
-				m_FogBlit.SetFloat("_DistanceFogOffset", m_BetterFogVolume._DistanceFogOffset.value);
+				m_FogBlit.SetFloat("_DistanceFogOffset", m_FogVolume._DistanceFogOffset.value);
 
-				m_FogBlit.SetFloat("_SkyboxFogIntensity", m_BetterFogVolume._SkyboxFogIntensity.value);
-				m_FogBlit.SetFloat("_SkyboxFogHardness", m_BetterFogVolume._SkyboxFogHardness.value);
-				m_FogBlit.SetFloat("_SkyboxFogOffset", m_BetterFogVolume._SkyboxFogOffset.value);
-				m_FogBlit.SetFloat("_SkyboxFill", m_BetterFogVolume._SkyboxFill.value);
+				m_FogBlit.SetFloat("_SkyboxFogIntensity", m_FogVolume._SkyboxFogIntensity.value);
+				m_FogBlit.SetFloat("_SkyboxFogHardness", m_FogVolume._SkyboxFogHardness.value);
+				m_FogBlit.SetFloat("_SkyboxFogOffset", m_FogVolume._SkyboxFogOffset.value);
+				m_FogBlit.SetFloat("_SkyboxFill", m_FogVolume._SkyboxFill.value);
 
-				m_FogBlit.SetFloat("_HeightDensity", Mathf.Pow(m_BetterFogVolume._HeightDensity.value, 4));
-				m_FogBlit.SetFloat("_Height", m_BetterFogVolume._Height.value);
-				m_FogBlit.SetInt("_HeightFogTypeExp", ((int)m_BetterFogVolume._HeightFogType.value == 2 ? 1 : 0));
+				m_FogBlit.SetFloat("_HeightDensity", Mathf.Pow(m_FogVolume._HeightDensity.value, 4));
+				m_FogBlit.SetFloat("_Height", m_FogVolume._Height.value);
+				m_FogBlit.SetInt("_HeightFogTypeExp", ((int)m_FogVolume._HeightFogType.value == 2 ? 1 : 0));
 
-				m_FogBlit.SetFloat("_Scale1", m_BetterFogVolume._Scale1.value);
-				m_FogBlit.SetFloat("_NoiseTimeScale1", m_BetterFogVolume._NoiseTimeScale1.value);
-				m_FogBlit.SetFloat("_Lerp1", m_BetterFogVolume._Lerp1.value);
-				m_FogBlit.SetFloat("_NoiseDistanceEnd", m_BetterFogVolume._NoiseDistanceEnd.value);
-				m_FogBlit.SetFloat("_NoiseIntensity", m_BetterFogVolume._NoiseIntensity.value);
-				m_FogBlit.SetFloat("_NoiseEndHardness", m_BetterFogVolume._NoiseEndHardness.value);
+				m_FogBlit.SetFloat("_Scale1", m_FogVolume._Scale1.value);
+				m_FogBlit.SetFloat("_NoiseTimeScale1", m_FogVolume._NoiseTimeScale1.value);
+				m_FogBlit.SetFloat("_Lerp1", m_FogVolume._Lerp1.value);
+				m_FogBlit.SetFloat("_NoiseDistanceEnd", m_FogVolume._NoiseDistanceEnd.value);
+				m_FogBlit.SetFloat("_NoiseIntensity", m_FogVolume._NoiseIntensity.value);
+				m_FogBlit.SetFloat("_NoiseEndHardness", m_FogVolume._NoiseEndHardness.value);
 
-				m_FogBlit.SetVector("_NoiseSpeed1", m_BetterFogVolume._NoiseSpeed1.value);
+				m_FogBlit.SetVector("_NoiseSpeed1", m_FogVolume._NoiseSpeed1.value);
 
 				int useNoiseDistance = 0;
 				int useNoiseHeight = 0;
 
-				switch (m_BetterFogVolume._NoiseAffect.value)
+				switch (m_FogVolume._NoiseAffect.value)
 				{
 					case NoiseAffect.DistanceOnly:
 						useNoiseDistance = 1;
@@ -251,10 +251,10 @@ namespace INab.BetterFog.URP
 						break;
 				}
 
-				if (m_BetterFogVolume._UseDistanceFog.value == false)
+				if (m_FogVolume._UseDistanceFog.value == false)
 					useNoiseDistance = 0;
 
-				if (m_BetterFogVolume._UseHeightFog.value == false)
+				if (m_FogVolume._UseHeightFog.value == false)
 					useNoiseHeight = 0;
 
 				m_FogBlit.SetInt("_UseNoiseDistance", useNoiseDistance);
@@ -263,18 +263,18 @@ namespace INab.BetterFog.URP
 
 				// Distance Fog Values
 				Vector4 sceneParams;
-				float diff = m_BetterFogVolume._SceneEnd.value - m_BetterFogVolume._SceneStart.value;
+				float diff = m_FogVolume._SceneEnd.value - m_FogVolume._SceneStart.value;
 				float invDiff = Mathf.Abs(diff) > 0.0001f ? 1.0f / diff : 0.0f;
-				sceneParams.x = m_BetterFogVolume._FogDensity.value * 1.2011224087f; // density / sqrt(ln(2)), used by Exp2 fog mode
-				sceneParams.y = m_BetterFogVolume._FogDensity.value * 1.4426950408f; // density / ln(2), used by Exp fog mode
+				sceneParams.x = m_FogVolume._FogDensity.value * 1.2011224087f; // density / sqrt(ln(2)), used by Exp2 fog mode
+				sceneParams.y = m_FogVolume._FogDensity.value * 1.4426950408f; // density / ln(2), used by Exp fog mode
 				sceneParams.z = -invDiff;
-				sceneParams.w = m_BetterFogVolume._SceneEnd.value * invDiff;
+				sceneParams.w = m_FogVolume._SceneEnd.value * invDiff;
 				m_FogBlit.SetVector("_SceneFogParams", sceneParams);
 			}
 
 			private void FinalBlitProperties()
             {
-				if (m_BetterFogVolume._UseSunLight.value)
+				if (m_FogVolume._UseSunLight.value)
 				{
 					m_FinalBlit.EnableKeyword("_USESUNLIGHT_ON");
 				}
@@ -283,7 +283,7 @@ namespace INab.BetterFog.URP
 					m_FinalBlit.DisableKeyword("_USESUNLIGHT_ON");
 				}
 
-				if (m_BetterFogVolume._UseGradient.value)
+				if (m_FogVolume._UseGradient.value)
 				{
 					m_FinalBlit.EnableKeyword("_USEGRADIENT_ON");
 				}
@@ -293,54 +293,54 @@ namespace INab.BetterFog.URP
 				}
 
 
-				m_FinalBlit.SetColor("_SunColor", m_BetterFogVolume._SunColor.value);
-				m_FinalBlit.SetFloat("_SunPower", m_BetterFogVolume._SunPower.value);
-				m_FinalBlit.SetFloat("_SunIntensity", m_BetterFogVolume._SunIntensity.value);
+				m_FinalBlit.SetColor("_SunColor", m_FogVolume._SunColor.value);
+				m_FinalBlit.SetFloat("_SunPower", m_FogVolume._SunPower.value);
+				m_FinalBlit.SetFloat("_SunIntensity", m_FogVolume._SunIntensity.value);
 
-				m_FinalBlit.SetColor("_FogColor", m_BetterFogVolume._FogColor.value);
+				m_FinalBlit.SetColor("_FogColor", m_FogVolume._FogColor.value);
 
-				m_FinalBlit.SetFloat("_GradientStart", m_BetterFogVolume._GradientStart.value);
-				m_FinalBlit.SetFloat("_GradientEnd", m_BetterFogVolume._GradientEnd.value);
+				m_FinalBlit.SetFloat("_GradientStart", m_FogVolume._GradientStart.value);
+				m_FinalBlit.SetFloat("_GradientEnd", m_FogVolume._GradientEnd.value);
 
 				// Custom texture lerping
 				// TODO change to standard TextureParemeter after Unity adds Texture Interp (in 2023 not available yet)
-				if (m_BetterFogVolume._GradientTexture.value != null)
+				if (m_FogVolume._GradientTexture.value != null)
 				{
-					m_FinalBlit.SetFloat("_GradientLerp", m_BetterFogVolume._GradientTexture.LerpValue);
-					m_FinalBlit.SetTexture("_GradientTextureFrom", m_BetterFogVolume._GradientTexture.FromTexture);
-					m_FinalBlit.SetTexture("_GradientTexture", m_BetterFogVolume._GradientTexture.value);
+					m_FinalBlit.SetFloat("_GradientLerp", m_FogVolume._GradientTexture.LerpValue);
+					m_FinalBlit.SetTexture("_GradientTextureFrom", m_FogVolume._GradientTexture.FromTexture);
+					m_FinalBlit.SetTexture("_GradientTexture", m_FogVolume._GradientTexture.value);
 				}
 
-				m_FinalBlit.SetFloat("_EnergyLoss", m_BetterFogVolume._EnergyLoss.value);
+				m_FinalBlit.SetFloat("_EnergyLoss", m_FogVolume._EnergyLoss.value);
 			}
 
 			private int SSMSProperties(float tw,float th)
 			{
 				// determine the iteration count
-				var logh = Mathf.Log(th, 2) + m_BetterFogVolume._Radius.value - 8;
+				var logh = Mathf.Log(th, 2) + m_FogVolume._Radius.value - 8;
 				var logh_i = (int)logh;
 				var iterations = Mathf.Clamp(logh_i, 1, kMaxIterations);
 
 				// update the shader properties
-				var lthresh = m_BetterFogVolume._Threshold.value;
+				var lthresh = m_FogVolume._Threshold.value;
 				m_SSMS.SetFloat("_Threshold", lthresh);
 
-				var knee = lthresh * m_BetterFogVolume._SoftKnee.value + 1e-5f;
+				var knee = lthresh * m_FogVolume._SoftKnee.value + 1e-5f;
 				var curve = new Vector3(lthresh - knee, knee * 2, 0.25f / knee);
 				m_SSMS.SetVector("_Curve", curve);
 
-				var pfo = !m_BetterFogVolume._HighQuality.value && m_BetterFogVolume._AntiFlicker.value;
+				var pfo = !m_FogVolume._HighQuality.value && m_FogVolume._AntiFlicker.value;
 				m_SSMS.SetFloat("_PrefilterOffs", pfo ? -0.5f : 0.0f);
 
 				m_SSMS.SetFloat("_SampleScale", 0.5f + logh - logh_i);
-				m_SSMS.SetFloat("_Intensity", m_BetterFogVolume._Intensity.value);
+				m_SSMS.SetFloat("_Intensity", m_FogVolume._Intensity.value);
 
-				var fadeRampTexture = m_BetterFogVolume._FadeRamp.value;
+				var fadeRampTexture = m_FogVolume._FadeRamp.value;
 				if(fadeRampTexture != null) m_SSMS.SetTexture("_FadeTex", fadeRampTexture);
-				m_SSMS.SetFloat("_BlurWeight", m_BetterFogVolume._BlurWeight.value);
-				m_SSMS.SetFloat("_Radius", m_BetterFogVolume._Radius.value);
+				m_SSMS.SetFloat("_BlurWeight", m_FogVolume._BlurWeight.value);
+				m_SSMS.SetFloat("_Radius", m_FogVolume._Radius.value);
 
-				if (m_BetterFogVolume._AntiFlicker.value)
+				if (m_FogVolume._AntiFlicker.value)
 				{
 					m_SSMS.EnableKeyword("ANTI_FLICKER_ON");
 				}
@@ -349,7 +349,7 @@ namespace INab.BetterFog.URP
 					m_SSMS.DisableKeyword("ANTI_FLICKER_ON");
 				}
 
-				if (m_BetterFogVolume._HighQuality.value)
+				if (m_FogVolume._HighQuality.value)
 				{
 					m_SSMS.EnableKeyword("_HIGH_QUALITY_ON");
 				}
@@ -401,15 +401,15 @@ namespace INab.BetterFog.URP
 			private void GetFogVolume()
 			{
 				// Renderer feature stuff
-				if (m_BetterFogVolume == null)
+				if (m_FogVolume == null)
 				{
 					// Get better fog volume
 					var stack = VolumeManager.instance.stack;
-					m_BetterFogVolume = stack.GetComponent<BetterFogVolume>();
+					m_FogVolume = stack.GetComponent<FogVolume>();
 				}
-				if (m_BetterFogVolume == null)
+				if (m_FogVolume == null)
 				{
-					Debug.LogError("There is no BetterFogVolume in Volume Stack.");
+					Debug.LogError("There is no FogVolume in Volume Stack.");
 				}
 			}
 
@@ -421,7 +421,7 @@ namespace INab.BetterFog.URP
 				GetFogVolume();
 
 				//Only process if the effect is active
-				if (!m_BetterFogVolume.IsActive())
+				if (!m_FogVolume.IsActive())
 					return;
 
 				var cmd = CommandBufferPool.Get("Better Fog");
@@ -433,7 +433,7 @@ namespace INab.BetterFog.URP
 				if (renderingData.cameraData.cameraType == CameraType.Game)
                 {
 					var sceneCamera = FindObjectOfType<Camera>();
-					var set = sceneCamera.GetComponent<BetterFogRenderers>();
+					var set = sceneCamera.GetComponent<FogRenderers>();
 
 					if (set != null)
 					{
@@ -486,7 +486,7 @@ namespace INab.BetterFog.URP
 				m_FinalBlit.SetMatrix("_InverseView", renderingData.cameraData.camera.cameraToWorldMatrix);
 
 				// Fog post process blit
-				if (!m_BetterFogVolume._UseSSMS.value)
+				if (!m_FogVolume._UseSSMS.value)
 				{
 					// Fog blit to FogFactorRT
 					Blitter.BlitCameraTexture(cmd, cameraColorTarget, m_FogFactorRT, m_FogBlit, 0);
@@ -594,7 +594,7 @@ namespace INab.BetterFog.URP
 
 			public override void OnCameraCleanup(CommandBuffer cmd)
 			{
-				// When no alloc on the BetterFogPass constructor then it throws null
+				// When no alloc on the FogPass constructor then it throws null
 
 				cmd.ReleaseTemporaryRT(Shader.PropertyToID(m_FogFactorRT.name));
 				cmd.ReleaseTemporaryRT(Shader.PropertyToID(m_CustomDepthRT.name));

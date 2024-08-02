@@ -2,9 +2,9 @@ using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using INab.BetterFog.Core;
+using INab.Fog.Core;
 
-namespace INab.BetterFog.URP
+namespace INab.Fog.URP
 {
 	[Serializable]
 	public sealed class FogParameterURP : VolumeParameter<FogMode> { public FogParameterURP(FogMode value, bool overrideState = false) : base(value, overrideState) { } }
@@ -40,8 +40,8 @@ namespace INab.BetterFog.URP
 	}
 
 
-	[Serializable, VolumeComponentMenuForRenderPipeline("INabStudio/BetterFog", typeof(UniversalRenderPipeline))]
-	public class BetterFogVolume : VolumeComponent, IPostProcessComponent
+	[Serializable, VolumeComponentMenuForRenderPipeline("Hidden/Fog", typeof(UniversalRenderPipeline))] 
+	public class FogVolume : VolumeComponent, IPostProcessComponent
 	{
 		#region FogParameters
 
