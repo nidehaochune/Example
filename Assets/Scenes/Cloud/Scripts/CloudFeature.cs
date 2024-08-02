@@ -186,7 +186,7 @@ public class CloudFeature : ScriptableRendererFeature
              // //降cloud分辨率 并使用第1个pass 渲染云
              BlitFullscreenTriangle(cmd, DownsampleDepthID, DownsampleColorID, 1);
              // //使用第2个Pass 合成
-             // cmd.SetGlobalTexture(Shader.PropertyToID("_MainTex"), currentTarget);
+             cmd.SetGlobalTexture(Shader.PropertyToID("_MainTex"), currentTarget);
              // cmd.GetTemporaryRT((int)TempRT, renderingData.cameraData.cameraTargetDescriptor, FilterMode.Bilinear);
 
              BlitFullscreenTriangle(cmd, DownsampleColorID, currentTarget, 2);
