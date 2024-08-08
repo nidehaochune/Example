@@ -21,7 +21,6 @@ Shader "Hidden/Clouds"
             #pragma fragment frag
 
             #include "UnityCG.cginc"
-            #include "Assets/Scenes/Cloud/Scripts/Version2/Shaders/CloudDebug.cginc"
 
             // vertex input: position, UV
             struct appdata {
