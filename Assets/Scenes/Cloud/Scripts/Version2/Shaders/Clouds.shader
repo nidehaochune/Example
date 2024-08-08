@@ -15,16 +15,13 @@ Shader "Hidden/Clouds"
 
         Pass
         {
-            HLSLPROGRAM
+            CGPROGRAM
 
             #pragma vertex vert
             #pragma fragment frag
 
-            // #include "UnityCG.cginc"
+            #include "UnityCG.cginc"
 
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            #include  "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
             // vertex input: position, UV
             struct appdata {
                 float4 vertex : POSITION;
@@ -39,7 +36,7 @@ Shader "Hidden/Clouds"
 
             v2f vert(appdata v) {
                 v2f output;
-                output.pos = TransformObjectToHClip(v.vertex);
+                output.pos = UnityObjectToClipPos(v.vertex);
                 output.uv = v.uv;
                 // Camera space matches OpenGL convention where cam forward is -z. In unity forward is positive z.
                 // (https://docs.unity3d.com/ScriptReference/Camera-cameraToWorldMatrix.html)
@@ -63,6 +60,7 @@ Shader "Hidden/Clouds"
             SamplerState samplerBlueNoise;
 
             sampler2D _MainTex;
+            sampler2D _CameraDepthTexture;
 
             // Shape settings
             float4 params;
@@ -229,7 +227,7 @@ Shader "Hidden/Clouds"
 
             // Calculate proportion of light that reaches the given point from the lightsource
             float lightmarch(float3 position) {
-                float3 dirToLight = GetMainLight().direction;
+                float3 dirToLight = _WorldSpaceLightPos0.xyz;
 
                 float dstInsideBox = rayBoxDst(boundsMin, boundsMax, position, 1 / dirToLight).y;
 
@@ -283,13 +281,13 @@ Shader "Hidden/Clouds"
                 }
                 #endif
 
-            float3 rayPos = _WorldSpaceCameraPos;
+                float3 rayPos = _WorldSpaceCameraPos;
                 float viewLength = length(i.viewVector);
                 float3 rayDir = i.viewVector / viewLength;
 
                 // Depth and cloud container intersection info:
-                float nonlin_depth = SampleSceneDepth(i.uv);
-                float depth = LinearEyeDepth(nonlin_depth,_ZBufferParams) * viewLength;
+                float nonlin_depth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, i.uv);
+                float depth = LinearEyeDepth(nonlin_depth) * viewLength;
 
                 float2 rayToContainerInfo = rayBoxDst(boundsMin, boundsMax, rayPos, 1 / rayDir);
 
@@ -305,7 +303,7 @@ Shader "Hidden/Clouds"
                 randomOffset *= rayOffsetStrength;
 
                 // Phase function makes clouds brighter around sun
-                float cosAngle = dot(rayDir, GetMainLight().direction.xyz);
+                float cosAngle = dot(rayDir, _WorldSpaceLightPos0.xyz);
                 float phaseVal = phase(cosAngle);
 
                 float dstTravelled = randomOffset;
@@ -339,7 +337,7 @@ Shader "Hidden/Clouds"
                 return float4(col,0);
             }
 
-            ENDHLSL
+            ENDCG
         }
     }
 }
