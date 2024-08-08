@@ -124,13 +124,14 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: 3703267761612489948}
   - {fileID: 5206027787815393454}
-  - {fileID: -8712525699046461375}
   - {fileID: 5405998932977147538}
   - {fileID: -2098840580357768535}
   - {fileID: 5328232041963035459}
   - {fileID: -4742459509365332228}
+  - {fileID: -8712525699046461375}
   - {fileID: -3094929724693229633}
-  m_RendererFeatureMap: dc84118f68a66433ae988cb7b0863f4841b0dfa309e41687925e3e2863f7054ba9ba99bf9c6bdfe2439b0fdecfaef149fc269bee33662fbebfcfdc22d0990cd5
+  - {fileID: 3686848566859369683}
+  m_RendererFeatureMap: dc84118f68a66433ae988cb7b0863f48925e3e2863f7054ba9ba99bf9c6bdfe2439b0fdecfaef149fc269bee33662fbe41b0dfa309e41687bfcfdc22d0990cd5d38c4fe03c512a33
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -208,6 +209,21 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 3302065f671a8450b82c9ddf07426f3a, type: 3}
   - {fileID: 2800000, guid: 56a77a3e8d64f47b6afe9e3c95cb57d5, type: 3}
   m_Shader: {fileID: 4800000, guid: 0849e84e3d62649e8882e9d6f056a017, type: 3}
+--- !u!114 &3686848566859369683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b74f55bd4e26d2e4cb08f89d6873f204, type: 3}
+  m_Name: RaymarchingCloudRendererFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  m_material: {fileID: 2100000, guid: a7cea3d78eeb8804e94d8b66e3e47de9, type: 2}
+  m_renderPassEvent: 550
 --- !u!114 &3703267761612489948
 MonoBehaviour:
   m_ObjectHideFlags: 0

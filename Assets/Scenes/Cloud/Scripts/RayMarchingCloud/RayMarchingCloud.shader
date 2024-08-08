@@ -328,16 +328,6 @@
             {
 //                Tags {"RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline"}
                 Cull Off ZWrite Off ZTest Always
-
-                Pass
-                {
-                     Cull Off ZWrite Off ZTest Always
-
-                     HLSLPROGRAM
-                     #pragma vertex VertDefault
-                     #pragma fragment DownsampleDepth
-                     ENDHLSL
-                }
                 Pass
                 {
                     HLSLPROGRAM
@@ -348,6 +338,16 @@
 
                     ENDHLSL
                 }
+                Pass
+                {
+                     Cull Off ZWrite Off ZTest Always
+
+                     HLSLPROGRAM
+                     #pragma vertex VertDefault
+                     #pragma fragment DownsampleDepth
+                     ENDHLSL
+                }
+
 
 
                 Pass
