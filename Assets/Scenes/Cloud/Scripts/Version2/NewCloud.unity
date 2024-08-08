@@ -155,7 +155,7 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: a7cea3d78eeb8804e94d8b66e3e47de9, type: 2}
   container: {fileID: 1028364211}
   cloudTestParams: {x: 0, y: 0, z: 0}
-  numStepsLight: 25
+  numStepsLight: 8
   rayOffsetStrength: 10
   blueNoise: {fileID: 2800000, guid: d25158ef7a361f6409bbeb2b86bb2118, type: 3}
   cloudScale: 1
