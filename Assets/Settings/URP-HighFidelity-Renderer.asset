@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f15c3bed367adf64da6316ae42ef95dc, type: 3}
   m_Name: BetterFogFeature
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   settings:
     Event: 550
     _UseCustomDepthTexture: 0
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74062cb5444fc44f585bafced08ae55a, type: 3}
   m_Name: TemporalAAFeature
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   TemporalFade: 0.95
   MovementBlending: 100
   UseFlipUV: 0

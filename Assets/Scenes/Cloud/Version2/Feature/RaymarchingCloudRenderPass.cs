@@ -27,6 +27,7 @@ public class RaymarchingCloudRenderPass : ScriptableRenderPass
 
     public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
     {
+
         if (!m_material) return;
 
         ref CameraData camData = ref renderingData.cameraData;
@@ -40,10 +41,13 @@ public class RaymarchingCloudRenderPass : ScriptableRenderPass
         buf.Blit(m_currentTarget, m_raymarchingTempID);
         buf.Blit(m_raymarchingTempID, m_currentTarget, m_material);
         buf.ReleaseTemporaryRT(m_raymarchingTempID);
+
 #else
         buf.Blit(m_currentTarget, m_currentTarget, m_material);
 #endif
+
         context.ExecuteCommandBuffer(buf);
+
         CommandBufferPool.Release(buf);
     }
 }

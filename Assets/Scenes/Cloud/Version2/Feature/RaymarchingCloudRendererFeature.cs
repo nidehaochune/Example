@@ -1,5 +1,6 @@
-using UnityEngine;
+using UnityEngine;using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 public class RaymarchingCloudRendererFeature : ScriptableRendererFeature
 {
@@ -19,6 +20,7 @@ public class RaymarchingCloudRendererFeature : ScriptableRendererFeature
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
+
         m_raymarchingCloudTexturePass.renderPassEvent = m_renderPassEvent;
         renderer.EnqueuePass(m_raymarchingCloudTexturePass);
     }
@@ -27,4 +29,9 @@ public class RaymarchingCloudRendererFeature : ScriptableRendererFeature
     {
         m_raymarchingCloudTexturePass.SetRenderTarget(renderer.cameraColorTargetHandle);
     }
+}
+
+public class CloudVolume :VolumeComponent
+{
+    
 }
