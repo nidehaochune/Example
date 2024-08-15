@@ -236,7 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e49b01ee55ae4e4fa2da31c9c7c5b01a, type: 3}
   m_Name: RendererFeatureHizMap
   m_EditorClassIdentifier: 
-  m_Active: 0
+  m_Active: 1
   hizComputeShader: {fileID: 7200000, guid: d6f77306f1ab5df4a94ba2f35bc94151, type: 3}
 --- !u!114 &5206027787815393454
 MonoBehaviour:
@@ -250,7 +250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bddcf9563e5486c982212aaea9de9d0, type: 3}
   m_Name: RendererFeatureTerrain
   m_EditorClassIdentifier: 
-  m_Active: 0
+  m_Active: 1
   instanceMaterial: {fileID: 2100000, guid: 2c216f0b6b9868346818af09d70d26c0, type: 2}
   computeShader: {fileID: 7200000, guid: 334d0d3ed21cb3741aa839b1530080e2, type: 3}
   LODJudgeFactor: 2
