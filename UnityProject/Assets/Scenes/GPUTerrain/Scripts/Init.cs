@@ -162,7 +162,7 @@ public class Init : MonoBehaviour
 //         GUILayout.EndHorizontal();
 //         GUI.Box(new Rect(0, 0, 200, instance.isLODDebug ? 260 : 210), Texture2D.blackTexture);
 //     }
-
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         var vecSize = new Vector3(1, 0, 1);
@@ -193,5 +193,7 @@ public class Init : MonoBehaviour
             UnityEditor.Handles.Label(new Vector3((node.x + 0.5f) * size, 0, (node.y + 0.5f) * size), node.z + "");
         }
     }
+#endif
+
 // #endif
 }

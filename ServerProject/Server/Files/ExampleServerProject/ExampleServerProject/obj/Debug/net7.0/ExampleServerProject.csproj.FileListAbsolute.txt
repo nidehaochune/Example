@@ -1,0 +1,15 @@
+E:\UnityProject\Example\ServerProject\Server\Files\ExampleServerProject\ExampleServerProject\bin\Debug\net7.0\ExampleServerProject.exe
+E:\UnityProject\Example\ServerProject\Server\Files\ExampleServerProject\ExampleServerProject\bin\Debug\net7.0\ExampleServerProject.deps.json
+E:\UnityProject\Example\ServerProject\Server\Files\ExampleServerProject\ExampleServerProject\bin\Debug\net7.0\ExampleServerProject.runtimeconfig.json
+E:\UnityProject\Example\ServerProject\Server\Files\ExampleServerProject\ExampleServerProject\bin\Debug\net7.0\ExampleServerProject.dll
+E:\UnityProject\Example\ServerProject\Server\Files\ExampleServerProject\ExampleServerProject\bin\Debug\net7.0\ExampleServerProject.pdb
+E:\UnityProject\Example\ServerProject\Server\Files\ExampleServerProject\ExampleServerProject\obj\Debug\net7.0\ExampleServerProject.csproj.AssemblyReference.cache
+E:\UnityProject\Example\ServerProject\Server\Files\ExampleServerProject\ExampleServerProject\obj\Debug\net7.0\ExampleServerProject.GeneratedMSBuildEditorConfig.editorconfig
+E:\UnityProject\Example\ServerProject\Server\Files\ExampleServerProject\ExampleServerProject\obj\Debug\net7.0\ExampleServerProject.AssemblyInfoInputs.cache
+E:\UnityProject\Example\ServerProject\Server\Files\ExampleServerProject\ExampleServerProject\obj\Debug\net7.0\ExampleServerProject.AssemblyInfo.cs
+E:\UnityProject\Example\ServerProject\Server\Files\ExampleServerProject\ExampleServerProject\obj\Debug\net7.0\ExampleServerProject.csproj.CoreCompileInputs.cache
+E:\UnityProject\Example\ServerProject\Server\Files\ExampleServerProject\ExampleServerProject\obj\Debug\net7.0\ExampleServerProject.dll
+E:\UnityProject\Example\ServerProject\Server\Files\ExampleServerProject\ExampleServerProject\obj\Debug\net7.0\refint\ExampleServerProject.dll
+E:\UnityProject\Example\ServerProject\Server\Files\ExampleServerProject\ExampleServerProject\obj\Debug\net7.0\ExampleServerProject.pdb
+E:\UnityProject\Example\ServerProject\Server\Files\ExampleServerProject\ExampleServerProject\obj\Debug\net7.0\ExampleServerProject.genruntimeconfig.cache
+E:\UnityProject\Example\ServerProject\Server\Files\ExampleServerProject\ExampleServerProject\obj\Debug\net7.0\ref\ExampleServerProject.dll

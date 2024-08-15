@@ -4,8 +4,6 @@ using UnityEngine.Rendering.Universal;
 using System;
 using System.Collections.Generic;
 using INab.Fog.Core;
-using UnityEngine.Rendering.HighDefinition;
-using static Unity.Burst.Intrinsics.X86.Avx;
 
 namespace INab.Fog.URP
 {
