@@ -257,9 +257,9 @@ MonoBehaviour:
   isViewFrustumCulling: 1
   isHizCulling: 1
   isFixLODSeam: 1
-  isPatchReadBack: 0
+  isPatchReadBack: 1
   isPatchDebug: 0
-  isMipDebug: 0
+  isMipDebug: 1
   isLODDebug: 0
   isManualUpdate: 0
 --- !u!114 &5328232041963035459
