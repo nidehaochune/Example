@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Web/Net.unity
-    guid: 23d09955fbbbee046a8b7de343dbac9b
+    path: Assets/Scenes/HotUpdateTest/HotUpdate.unity
+    guid: 9bc6028f5a1991544846f3177793f55e
   m_configObjects: {}
