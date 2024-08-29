@@ -75,7 +75,7 @@ ModelImporter:
       name: 9.shinki
     second: {fileID: 2100000, guid: a5defc0f7d0c1a94eb11906a4929ec16, type: 2}
   materials:
-    materialImportMode: 2
+    materialImportMode: 0
     materialName: 0
     materialSearch: 0
     materialLocation: 1
