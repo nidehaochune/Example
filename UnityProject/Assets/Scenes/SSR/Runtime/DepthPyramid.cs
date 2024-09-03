@@ -44,11 +44,6 @@ public class DepthPyramid : ScriptableRendererFeature
 
         Vector2 screenSize;
 
-        // This method is called before executing the render pass.
-        // It can be used to configure render targets and their clear state. Also to create temporary render target textures.
-        // When empty this render pass will render to the active camera render target.
-        // You should never call CommandBuffer.SetRenderTarget. Instead call <c>ConfigureTarget</c> and <c>ConfigureClear</c>.
-        // The render pipeline will ensure target setup and clearing happens in a performant manner.
         public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
         {
             //depthSliceResolutions = new ComputeBuffer(buffersize, sizeof(int) * 2, ComputeBufferType.Default);
@@ -120,10 +115,6 @@ public class DepthPyramid : ScriptableRendererFeature
             cmd.SetComputeIntParam(settings.shader, "dSlice", slice);
         }
 
-        // Here you can implement the rendering logic.
-        // Use <c>ScriptableRenderContext</c> to issue drawing commands or execute command buffers
-        // https://docs.unity3d.com/ScriptReference/Rendering.ScriptableRenderContext.html
-        // You don't have to call ScriptableRenderContext.submit, the render pipeline will call it at specific points in the pipeline.
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
             float width = screenSize.x;
@@ -189,11 +180,8 @@ public class DepthPyramid : ScriptableRendererFeature
                 cmd.DispatchCompute(settings.shader, 3, cx, cy, 1);
                 cmd.DispatchCompute(settings.shader, 4, cx, cy, 1);
 
-#if UNITY_2022_1_OR_NEWER
                 cmd.Blit(finalDepthPyramidID, colorAttachmentHandle, Vector2.one, Vector2.zero, 0, 0);
-#else
-                    cmd.Blit(finalDepthPyramidID, colorAttachment, Vector2.one * tempSlices[debug].scale, Vector2.zero, 0, 0);
-#endif
+
                 context.ExecuteCommandBuffer(cmd);
                 CommandBufferPool.Release(cmd);
             }
@@ -274,8 +262,6 @@ public class DepthPyramid : ScriptableRendererFeature
         Create();
     }
 
-    // Here you can inject one or multiple render passes in the renderer.
-    // This method is called when setting up the renderer once per-camera.
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
         if (!renderingData.cameraData.postProcessEnabled)
