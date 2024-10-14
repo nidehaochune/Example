@@ -9,11 +9,13 @@ v2f vert (appdata v)
     VertexNormalInputs normal_inputs = GetVertexNormalInputs(v.normalOS.xyz,v.tangent);
     o.positionCS = position_inputs.positionCS;
     o.positionWS = position_inputs.positionWS;
+    o.positionVS = position_inputs.positionVS;
 
     
       o.tangentWS =   normal_inputs.tangentWS.xyz;
       o.bitangentWS =   normal_inputs.bitangentWS.xyz;
       o.normalWS =   normal_inputs.normalWS.xyz;
+    o.positionNDC = position_inputs.positionNDC;
     
 
     o.uv = TRANSFORM_TEX(v.uv, _MainTex);
@@ -24,6 +26,8 @@ half4 frag (v2f i) : SV_Target
 {
     float3 positionWS = i.positionWS;
     float3 viewDirWS =  GetWorldSpaceNormalizeViewDir(positionWS);
+    float2 screenPos = (i.positionNDC.xy/i.positionNDC.w);
+    // float2 screenUV = (i.positionCS.xy/_ScaledScreenParams.xy);
     //Normal Strength
     float2 timeSpeed1 = float2( _TimeParameters.x * _OffsetSpeed * -0.5,0);
     float2 timeSpeed2 = float2( _TimeParameters.x * _OffsetSpeed ,0);
@@ -55,17 +59,44 @@ half4 frag (v2f i) : SV_Target
     //Reflection
     float3 reflectionVector = reflect(-viewDirWS,normalWS);
 
-    float2 screenuv;
-    float3 reflection = Reflection(reflectionVector,positionWS,0,1,screenuv);
-
+    float3 reflection = Reflection(reflectionVector,positionWS,0,1,screenPos);
     float3 probeReflection =DecodeHDREnvironment(SAMPLE_TEXTURECUBE_LOD(unity_SpecCube0, samplerunity_SpecCube0, reflectionVector, 0), unity_SpecCube0_HDR);
 
+    float3 rmDirection = reflect(normalize(i.positionVS.xyz),TransformWorldToViewNormal(normalWS)); ;
+    float3 origin = i.positionVS;
+
+    float2 sampleUV;
+    float valid;
+    float outOfBounds;
+    half debug;
+
+    Raymarch(origin,rmDirection,20,0.2,1,sampleUV,valid,outOfBounds,debug);
+    float3 sceneColor = SampleSceneColor(sampleUV);
+
+    float3 finalReflection = lerp(reflection,lerp(probeReflection,sceneColor,valid),smoothstep(0,0.5,outOfBounds)); ;
     
+    //fresnel
+    float fresnel = Remap( Fresnel(normalWS,viewDirWS,5),float2(0,1),float2(0.01,1));
+
+    //depth
+    float rawdepth = SampleSceneDepth(screenPos);
+    float eyeDepth = LinearEyeDepth(rawdepth,_ZBufferParams);
+
+    //refraction
+    float refractionDepth = saturate(Remap(eyeDepth,float2(_RefractionFade.xy),float2(0,1)));
+    float2 refractionUV = finalNormalTS.xy*_RefractionIntensity * (1- refractionDepth) + screenPos.xy;
+
+    float3 refraction = SampleSceneColor(refractionUV);
+
+
+    float depth =saturate(Remap( max(0, LinearEyeDepth(SampleSceneDepth(refractionUV),_ZBufferParams) -i.positionNDC.w),_WaterDepthRange.xy,float2(0,1))) ;
+
+
+    //Color
+    float3 color = lerp(_ColorBright,_ColorDeep,depth);
+    float3 finalColor = lerp( color * refraction,color,_ColorAlpha);
     
-    
-    
-    
-    return float4(probeReflection,_ColorAlpha);
+    return float4(refraction,1);
 }
 
 

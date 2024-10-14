@@ -31,6 +31,8 @@ Shader "Hidden/Water"
         {
             Tags{ "LightMode" = "UniversalForward"}
             
+            
+            ZWrite Off
             Blend SrcAlpha OneMinusSrcAlpha
             
             HLSLPROGRAM

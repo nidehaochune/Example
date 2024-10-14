@@ -12,7 +12,9 @@ public class TestUI : MonoBehaviour
     /// 生成数量
     /// </summary>
     public int Count;
-    
+    public int Count1;
+    public int Count2;
+
     protected void Awake()
     {
         var list = new List<DynamicListBaseData>(0);

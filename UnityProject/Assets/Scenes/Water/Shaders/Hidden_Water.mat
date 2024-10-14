@@ -37,20 +37,20 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BlendTiling: 0
-    - _ColorAlpha: 1
+    - _BlendTiling: 0.04
+    - _ColorAlpha: 0.691
     - _EdgeFade: 0.588
     - _Metallic: 1
-    - _NormalMapStrength: 0.2
-    - _NormalTiling1: 0.0025
+    - _NormalMapStrength: 0.1
+    - _NormalTiling1: 0.004
     - _NormalTiling2: 0.01
-    - _OffsetSpeed: 0.04
+    - _OffsetSpeed: 0.007
     - _RefractionIntensity: 0.09
     m_Colors:
     - _BlendOffsetSpeed: {r: 0.1, g: 0.1, b: 0, a: 0}
-    - _ColorBright: {r: 0.11372546, g: 0.47896016, b: 0.62352943, a: 0}
-    - _ColorDeep: {r: 0.09545211, g: 0.31132078, b: 0.25649697, a: 0}
-    - _EdgeColor: {r: 0, g: 0.7647791, b: 1, a: 0}
-    - _RefractionFade: {r: 0, g: 10, b: 0, a: 0}
+    - _ColorBright: {r: 0.17254902, g: 0.34509805, b: 0.3529412, a: 0}
+    - _ColorDeep: {r: 0.21960786, g: 0.34117648, b: 0.3529412, a: 0}
+    - _EdgeColor: {r: 0.45882356, g: 0.5764706, b: 0.6039216, a: 0}
+    - _RefractionFade: {r: 0, g: 14.58, b: 0, a: 0}
     - _WaterDepthRange: {r: 0, g: 10, b: 0, a: 0}
   m_BuildTextureStacks: []
