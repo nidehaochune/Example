@@ -1,6 +1,10 @@
 ﻿#ifndef WATER_LINE_INCLUDE
 #define WATER_LINE_INCLUDE
 
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareOpaqueTexture.hlsl"
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 struct appdata
 {
     float4 positionOS : POSITION;

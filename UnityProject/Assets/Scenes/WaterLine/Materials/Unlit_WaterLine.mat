@@ -16,7 +16,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3005
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -31,7 +31,7 @@ Material:
     m_Floats:
     - _FX: 0.05
     - _FZ: 0.05
-    - _Offset: 3.64
+    - _Offset: 1.53
     - _PX: 2
     - _PZ: 0.89
     - _SpeedX: 5
@@ -41,8 +41,8 @@ Material:
     - _DepthColor: {r: 0.34509805, g: 0.7176471, b: 0.74509805, a: 1}
     - _DepthSmoothStep: {r: 0.55, g: 1.08, b: 0, a: 0}
     - _DepthWSYST: {r: 0, g: 0, b: 0, a: 0}
-    - _OffsetVector: {r: 0.19, g: -0.18, b: 0, a: 0}
+    - _OffsetVector: {r: 0, g: 0.03, b: 0, a: 0}
     - _ScreenUVOffset: {r: 0, g: 0, b: 0, a: 0}
     - _WaterDown: {r: 0.44705886, g: 0.56078434, b: 0.7058824, a: 1}
-    - _WaterLine: {r: 1, g: 0, b: 0, a: 1}
+    - _WaterLine: {r: 0.13333334, g: 0.33333334, b: 0.7725491, a: 1}
   m_BuildTextureStacks: []

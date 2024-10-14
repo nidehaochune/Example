@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Hidden_Water
+  m_Shader: {fileID: 4800000, guid: 6376691ad99886b48b47cf0ef962912b, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 3000
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Blend_Map:
+        m_Texture: {fileID: 2800000, guid: 4b8c01dba608c354a9a834d073e2882e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal_Map:
+        m_Texture: {fileID: 2800000, guid: e84d35b10cc408a45a1b79aa04cb09fb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _BlendTiling: 0
+    - _ColorAlpha: 1
+    - _EdgeFade: 0.588
+    - _Metallic: 1
+    - _NormalMapStrength: 0.2
+    - _NormalTiling1: 0.0025
+    - _NormalTiling2: 0.01
+    - _OffsetSpeed: 0.2
+    - _RefractionIntensity: 0.09
+    m_Colors:
+    - _BlendOffsetSpeed: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - _ColorBright: {r: 0.11372546, g: 0.47896016, b: 0.62352943, a: 0}
+    - _ColorDeep: {r: 0.09545211, g: 0.31132078, b: 0.25649697, a: 0}
+    - _EdgeColor: {r: 0, g: 0.7647791, b: 1, a: 0}
+    - _RefractionFade: {r: 0, g: 10, b: 0, a: 0}
+    - _WaterDepthRange: {r: 0, g: 10, b: 0, a: 0}
+  m_BuildTextureStacks: []
