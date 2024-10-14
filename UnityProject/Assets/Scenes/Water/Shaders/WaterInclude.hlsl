@@ -26,7 +26,6 @@ struct v2f
 
 };
 
-TEXTURE2D( _MainTex ); SAMPLER(sampler_MainTex);
 TEXTURE2D(_Normal_Map);SAMPLER(sampler_Normal_Map);
 TEXTURE2D( _Blend_Map ); SAMPLER(sampler_Blend_Map);
 

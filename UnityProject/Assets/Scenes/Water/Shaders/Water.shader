@@ -2,7 +2,6 @@ Shader "Hidden/Water"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
         _Metallic("Metallic", Range(0, 1)) = 0
         [Normal][NoScaleOffset]_Normal_Map("Normal Map", 2D) = "bump" {}
         _NormalTiling1("NormalTiling1", Float) = 0.0025

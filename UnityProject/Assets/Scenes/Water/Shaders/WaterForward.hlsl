@@ -73,7 +73,7 @@ half4 frag (v2f i) : SV_Target
     Raymarch(origin,rmDirection,20,0.2,1,sampleUV,valid,outOfBounds,debug);
     float3 sceneColor = SampleSceneColor(sampleUV);
 
-    float3 finalReflection = lerp(reflection,lerp(probeReflection,sceneColor,valid),smoothstep(0,0.5,outOfBounds)); ;
+    float3 finalReflection = lerp(reflection,lerp(probeReflection,sceneColor,valid),smoothstep(0,0.3,outOfBounds)); ;
     
     //fresnel
     float fresnel = Remap( Fresnel(normalWS,viewDirWS,5),float2(0,1),float2(0.01,1));
@@ -88,15 +88,56 @@ half4 frag (v2f i) : SV_Target
 
     float3 refraction = SampleSceneColor(refractionUV);
 
-
-    float depth =saturate(Remap( max(0, LinearEyeDepth(SampleSceneDepth(refractionUV),_ZBufferParams) -i.positionNDC.w),_WaterDepthRange.xy,float2(0,1))) ;
-
+    float waterDepth = LinearEyeDepth( SampleSceneDepth(refractionUV),_ZBufferParams);
+    float depth =saturate(Remap( max(0, waterDepth -i.positionNDC.w),_WaterDepthRange.xy,float2(0,1))) ;
 
     //Color
     float3 color = lerp(_ColorBright,_ColorDeep,depth);
-    float3 finalColor = lerp( color * refraction,color,_ColorAlpha);
+    float3 waterColor = lerp( color * refraction,color,_ColorAlpha);
+
+    //Depth Difference
+    float diffDepth = eyeDepth +i.positionVS.b;
+    //EdgeFade
+    float alpha = saturate(Remap(diffDepth,float2(0,_EdgeFade),float2(0,1)));
+    float smoothness = alpha;
+
+
+    //Water Depth
+    waterDepth = max(0,waterDepth - i.positionNDC.w) ;
+    float3 edgeColor = saturate(lerp(float4(1,1,1,0),_EdgeColor,pow(waterDepth,0.5))) * refraction;
+
+    float3 finalColor =lerp( saturate(edgeColor + waterColor),finalReflection,fresnel);
+
+   //
+    // SurfaceData surface;
+    // surface.albedo = float3(0,0,0);
+    // surface.specular = float3(0,0,0);
+    // surface.metallic = _Metallic;
+    // surface.normalTS = finalNormalTS;
+    // surface.emission = finalColor;
+    // surface.occlusion = 0;
+    // surface.alpha = alpha;
+    // surface.smoothness = smoothness;
+    // surface.clearCoatMask = 0;
+    // surface.clearCoatSmoothness = 0;
+    //
+    // InputData inputData;
+    // inputData.positionWS = i.positionVS;
+    // inputData.normalWS = normalWS;
+    // inputData.positionCS = i.positionCS;
+    // inputData.viewDirectionWS = viewDirWS;
+    // inputData.shadowCoord = TransformWorldToShadowCoord(i.positionVS);
+    // inputData.fogCoord = 0;
+    // inputData.vertexLighting = float3(0,0,0);
+    // inputData.bakedGI = float3(0,0,0);
+    // inputData.normalizedScreenSpaceUV = normalize(i.positionNDC.xy) ;
+    // inputData.shadowMask = 0;
+    // inputData.tangentToWorld = tangentToWorld;
+    //
+    // float3 Color = UniversalFragmentPBR(inputData,surface);
     
-    return float4(refraction,1);
+    
+    return float4(finalColor,alpha);
 }
 
 
