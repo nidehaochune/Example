@@ -44,7 +44,7 @@ Material:
     - _NormalMapStrength: 0.2
     - _NormalTiling1: 0.0025
     - _NormalTiling2: 0.01
-    - _OffsetSpeed: 0.2
+    - _OffsetSpeed: 0.04
     - _RefractionIntensity: 0.09
     m_Colors:
     - _BlendOffsetSpeed: {r: 0.1, g: 0.1, b: 0, a: 0}

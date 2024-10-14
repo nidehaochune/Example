@@ -53,15 +53,19 @@ half4 frag (v2f i) : SV_Target
 
 
     //Reflection
-    // float3 reflection1 = reflect(viewDirWS,normalWS,0);
-    float3 reflection1 = reflect(-viewDirWS,normalWS);
+    float3 reflectionVector = reflect(-viewDirWS,normalWS);
 
     float2 screenuv;
-    float3 finalReflection = Reflection(reflection1,positionWS,0,1,screenuv);
+    float3 reflection = Reflection(reflectionVector,positionWS,0,1,screenuv);
+
+    float3 probeReflection =DecodeHDREnvironment(SAMPLE_TEXTURECUBE_LOD(unity_SpecCube0, samplerunity_SpecCube0, reflectionVector, 0), unity_SpecCube0_HDR);
+
     
     
     
-    return float4(finalReflection,_ColorAlpha);
+    
+    
+    return float4(probeReflection,_ColorAlpha);
 }
 
 
