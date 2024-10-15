@@ -39,7 +39,7 @@ Material:
     m_Floats:
     - _BlendTiling: 0.04
     - _ColorAlpha: 0.57
-    - _EdgeFade: 0.21
+    - _EdgeFade: 0.15
     - _Metallic: 1
     - _NormalMapStrength: 0.1
     - _NormalTiling1: 0.004
@@ -51,6 +51,6 @@ Material:
     - _ColorBright: {r: 0.17254898, g: 0.34509802, b: 0.35294116, a: 1}
     - _ColorDeep: {r: 0.21960783, g: 0.34117645, b: 0.35294116, a: 1}
     - _EdgeColor: {r: 0.45882356, g: 0.57647055, b: 0.6039216, a: 1}
-    - _RefractionFade: {r: 0, g: 17.5, b: 0, a: 0}
+    - _RefractionFade: {r: 0, g: 10.09, b: 0, a: 0}
     - _WaterDepthRange: {r: 0, g: 10, b: 0, a: 0}
   m_BuildTextureStacks: []

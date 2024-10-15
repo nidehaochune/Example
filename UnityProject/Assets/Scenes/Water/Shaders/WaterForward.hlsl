@@ -77,7 +77,6 @@ half4 frag (v2f i) : SV_Target
     
     //fresnel
     float fresnel = Remap( Fresnel(normalWS,viewDirWS,5),float2(0,1),float2(0.01,1));
-
     //depth
     float rawdepth = SampleSceneDepth(screenPos);
     float eyeDepth = LinearEyeDepth(rawdepth,_ZBufferParams);
@@ -85,7 +84,6 @@ half4 frag (v2f i) : SV_Target
     //refraction
     float refractionDepth = saturate(Remap(eyeDepth,float2(_RefractionFade.xy),float2(0,1)));
     float2 refractionUV = finalNormalTS.xy*_RefractionIntensity * (1- refractionDepth) + screenPos.xy;
-
     float3 refraction = SampleSceneColor(refractionUV);
 
     float waterDepth = LinearEyeDepth( SampleSceneDepth(refractionUV),_ZBufferParams);
@@ -103,7 +101,7 @@ half4 frag (v2f i) : SV_Target
 
 
     //Water Depth
-    waterDepth = max(0,waterDepth - i.positionNDC.w) ;
+    waterDepth =max(0,waterDepth - i.positionNDC.w);
     float3 edgeColor = saturate(lerp(float4(1,1,1,0),_EdgeColor,pow(waterDepth,0.5))) * refraction;
 
     float3 finalColor =lerp( saturate(edgeColor + waterColor),finalReflection,fresnel);
