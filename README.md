@@ -1,5 +1,8 @@
 Record
 
+NPR人物渲染
+![img_4.png](Files%2Fimg_4.png)
+
 深度雾 + TAA
 ![img.png](Files%2Fimg.png)
 SSS
