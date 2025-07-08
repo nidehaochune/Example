@@ -79,7 +79,9 @@ Shader "PBR/Lit"
 //        _SkinScatterClampMin("_SkinScatterClampMin",Range(0,1) ) = 0
 //        _SkinScatterClampMax("_SkinScatterClampMax",Range(0,5) ) = 0
 
-                _CurvatureTexture("Curvature Texture",2D) = "white" {}
+        _CurvatureTexture("Curvature Texture",2D) = "white" {}
+        
+        _WetLevel("Wet level",Range(0,1)) = 1.0
     }
 
     SubShader
@@ -482,5 +484,5 @@ Shader "PBR/Lit"
     }
 
     FallBack "Hidden/Universal Render Pipeline/FallbackError"
-    CustomEditor "UnityEditor.Rendering.Universal.ShaderGUI.PBRShader"
+//    CustomEditor "UnityEditor.Rendering.Universal.ShaderGUI.PBRShader"
 }

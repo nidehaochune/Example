@@ -35,6 +35,7 @@ half4 _SkinScatterAmount;
 half _DetailAlbedoMapScale;
 half _DetailNormalMapScale;
 half _Surface;
+half _WetLevel;
 CBUFFER_END
 
 // NOTE: Do not ifdef the properties for dots instancing, but ifdef the actual usage.
@@ -249,6 +250,12 @@ inline void InitializeStandardLitSurfaceData(float2 uv, out SurfaceData outSurfa
     outSurfaceData.albedo = ApplyDetailAlbedo(detailUv, outSurfaceData.albedo, detailMask);
     outSurfaceData.normalTS = ApplyDetailNormal(detailUv, outSurfaceData.normalTS, detailMask);
 #endif
+}
+
+void DoWetProcess(inout  float3 diffuse,inout float gloss ,float wetLevel)
+{
+    diffuse *=lerp(1.0,3.0,wetLevel);
+    gloss = min(gloss * lerp(1.0,2.5,wetLevel),1.0);
 }
 
 #endif // UNIVERSAL_INPUT_SURFACE_PBR_INCLUDED
