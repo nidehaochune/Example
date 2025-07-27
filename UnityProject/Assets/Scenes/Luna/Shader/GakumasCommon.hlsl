@@ -260,7 +260,7 @@ float4 frag( v2f i , bool IsFront : SV_IsFrontFace) : SV_Target
 	float NoL = dot(NormalWS, _MatCapMainLight);
 	float MatCapNoL = dot(NormalMatS, _MatCapMainLight);
 	bool DisableMatCap = _MatCapMainLight.w > 0.5f;
-	NoL = DisableMatCap ? NoL : MatCapNoL;
+	NoL = DisableMatCap ? NoL : MatCapNoL; 
 	
 	float Shadow = MainLightRealtimeShadow(i.ShadowCoord);
     float ShadowFadeOut = dot(-ViewVector, -ViewVector);
