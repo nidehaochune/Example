@@ -37,7 +37,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BendRotationRandom: 0.256
+    - _BendRotationRandom: 0.266
     - _BladeCurve: 2
     - _BladeForward: 0.38
     - _BladeHeight: 0.44
@@ -45,8 +45,8 @@ Material:
     - _BladeWidth: 0.05
     - _BladeWidthRandom: 0.02
     - _ColorLerp: 0.685
-    - _TessellationUniform: 8
-    - _WindStrength: 0.3
+    - _TessellationUniform: 12
+    - _WindStrength: 0.76
     m_Colors:
     - _BottomColor: {r: 0.148332, g: 1, b: 0, a: 1}
     - _TopColor: {r: 0.081354514, g: 0.4811321, b: 0.011347453, a: 1}
